@@ -18,8 +18,8 @@ export default function CreatePage() {
     setCustomMessage,
     customMessage,
     handleImageUpload,
-    handleGenerateCaptions,
-    handleClear,
+    handleGenerateCaptions, // ✅ exposed correctly
+    clearImage,
     copyAll,
   } = useCreatePage(fileInputRef);
 
@@ -110,7 +110,7 @@ export default function CreatePage() {
                 ✨ Generate Captions
               </button>
               <button
-                onClick={handleClear}
+                onClick={clearImage}
                 className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
               >
                 Clear
