@@ -57,7 +57,7 @@ export default function CreatePage() {
           <header className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-extrabold text-gray-900">
-                Caption-pop Caption Generator
+                Taglet.in Caption Generator
               </h1>
               <p className="mt-2 text-sm text-gray-600">
                 Upload an image, select a vibe, and let AI craft the perfect
