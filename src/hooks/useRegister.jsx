@@ -33,7 +33,7 @@ export default function useRegister() {
           name,
           email,
           avatarUrl,
-          credits: 10, // Future payment support
+          credits: 0, // Future payment support
         }
       );
 
