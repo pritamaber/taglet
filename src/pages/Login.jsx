@@ -4,28 +4,37 @@ import { account } from "../appwrite/appwriteConfig";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+  // Refs for input fields
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  // Local component state
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Access setUser from global auth context
   const { setUser } = useAuth();
   const navigate = useNavigate();
 
+  // Handle form submission
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     try {
+      // ✅ Create email/password session
       await account.createEmailPasswordSession(
         emailRef.current.value,
         passwordRef.current.value
       );
 
+      // ✅ Optionally fetch user (not used due to refresh)
       const loggedInUser = await account.get();
       setUser(loggedInUser);
 
-      navigate("/create");
+      // ✅ Force full app reload to ensure avatar/profile loads immediately
+      window.location.href = "/create";
     } catch (err) {
       console.error("❌ Login error:", err);
       setError("Invalid email or password.");
@@ -44,6 +53,7 @@ export default function Login() {
           Login to Caption-Pop
         </h2>
 
+        {/* Email Field */}
         <input
           ref={emailRef}
           type="email"
@@ -51,6 +61,8 @@ export default function Login() {
           required
           className="w-full border px-3 py-2 rounded"
         />
+
+        {/* Password Field */}
         <input
           ref={passwordRef}
           type="password"
@@ -59,8 +71,10 @@ export default function Login() {
           className="w-full border px-3 py-2 rounded"
         />
 
+        {/* Error Message */}
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
