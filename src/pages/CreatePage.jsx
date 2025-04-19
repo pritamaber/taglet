@@ -1,12 +1,12 @@
 import { useRef } from "react";
 import useCreatePage from "../hooks/useCreatePage";
 import Navbar from "../components/Navbar";
+import { useSaved } from "../hooks/useSaved";
+import { useAuth } from "../context/AuthContext";
 
 export default function CreatePage() {
-  // Ref for resetting the file input
   const fileInputRef = useRef(null);
 
-  // Use custom hook with ref passed in
   const {
     image,
     mood,
@@ -19,14 +19,38 @@ export default function CreatePage() {
     setCustomMessage,
     customMessage,
     handleImageUpload,
-    handleGenerateCaptions, // ✅ exposed correctly
+    handleGenerateCaptions,
     clearImage,
     copyAll,
   } = useCreatePage(fileInputRef);
 
+  const { savePost } = useSaved();
+  const { user } = useAuth();
+
+  // Save post to Appwrite
+  const handleSave = async () => {
+    if (!user || !caption || !hashtags) {
+      alert("⚠️ Cannot save: Missing caption or user.");
+      return;
+    }
+
+    const result = await savePost({
+      userId: user.$id,
+      caption,
+      hashtags,
+      mood,
+      style,
+    });
+
+    if (result.success) {
+      alert("✅ Saved successfully!");
+    } else {
+      alert("❌ Failed to save: " + result.error);
+    }
+  };
+
   return (
     <>
-      {/* <Navbar /> */}
       <div className="min-h-screen bg-gray-50 flex items-start justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-5xl space-y-10">
           {/* Page Header */}
@@ -151,6 +175,7 @@ export default function CreatePage() {
                   alt="Preview"
                   className="w-full h-64 object-contain rounded border"
                 />
+
                 {loading ? (
                   <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center rounded">
                     <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
@@ -174,11 +199,23 @@ export default function CreatePage() {
                         <h3 className="text-lg font-semibold">🏷️ Hashtags</h3>
                         <div className="mt-1 text-sm text-blue-700 leading-relaxed break-words">
                           {hashtags
-                            .split(/\s+/) // split on any whitespace
-                            .filter((tag) => tag.startsWith("#")) // only valid hashtags
-                            .map((tag) => tag.replace(/^\d+\.*\s*/, "")) // remove leading numbers like 1. or 2
+                            .split(/\s+/)
+                            .filter((tag) => tag.startsWith("#"))
+                            .map((tag) => tag.replace(/^\d+\.*\s*/, ""))
                             .join(" ")}
                         </div>
+                      </div>
+                    )}
+
+                    {/* 💾 Save Button */}
+                    {caption && hashtags && (
+                      <div className="mt-4">
+                        <button
+                          onClick={handleSave}
+                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm"
+                        >
+                          💾 Save this post
+                        </button>
                       </div>
                     )}
                   </>

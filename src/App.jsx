@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
+import SavedPage from "./pages/SavedPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -70,9 +71,7 @@ function App() {
           path="/saved"
           element={
             <ProtectedRoute>
-              <div className="p-10 text-center text-xl text-gray-600">
-                📁 Saved posts coming soon...
-              </div>
+              <SavedPage />
             </ProtectedRoute>
           }
         />
