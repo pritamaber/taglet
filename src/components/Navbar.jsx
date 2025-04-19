@@ -1,9 +1,12 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { account } from "../appwrite/appwriteConfig";
+import { useState } from "react";
 
 export default function Navbar() {
   const { user, setUser } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -54,10 +57,9 @@ export default function Navbar() {
       {/* Right - Profile + Logout */}
       {/* Right - Profile + Logout */}
       {!isAuthPage && user && (
-        <div className="flex items-center space-x-4">
-          {/* Avatar + Name */}
+        <div className="relative">
           <div
-            onClick={() => navigate("/profile")}
+            onClick={() => setMenuOpen((prev) => !prev)}
             className="flex items-center cursor-pointer space-x-2"
           >
             <img
@@ -70,13 +72,43 @@ export default function Navbar() {
             </span>
           </div>
 
-          {/* Logout Link Style */}
-          <button
-            onClick={handleLogout}
-            className="text-sm text-red-600 hover:underline cursor-pointer bg-transparent border-none p-0 m-0"
-          >
-            Logout
-          </button>
+          {/* Dropdown */}
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow z-10">
+              <Link
+                to="/profile"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setMenuOpen(false)}
+              >
+                👤 Profile
+              </Link>
+              <Link
+                to="/settings"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setMenuOpen(false)}
+              >
+                ⚙️ Settings
+              </Link>
+              <Link
+                to="/plan"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setMenuOpen(false)}
+              >
+                💳 Plan Info
+              </Link>
+              <button
+                onClick={async () => {
+                  await account.deleteSession("current");
+                  setUser(null);
+                  setMenuOpen(false);
+                  navigate("/login");
+                }}
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+              >
+                🚪 Logout
+              </button>
+            </div>
+          )}
         </div>
       )}
     </nav>

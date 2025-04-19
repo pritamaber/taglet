@@ -13,6 +13,8 @@ import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import SavedPage from "./pages/SavedPage";
+import Settings from "./pages/Settings";
+import PlanPage from "./pages/PlanPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -72,6 +74,23 @@ function App() {
           element={
             <ProtectedRoute>
               <SavedPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/plan"
+          element={
+            <ProtectedRoute>
+              <PlanPage />
             </ProtectedRoute>
           }
         />
