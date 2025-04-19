@@ -11,6 +11,7 @@ import CreatePage from "./pages/CreatePage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import Profile from "./pages/Profile";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -51,6 +52,15 @@ function App() {
           element={
             <ProtectedRoute>
               <CreatePage />
+            </ProtectedRoute>
+          }
+        />
+        {/* ✅ Protected profile route */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />
