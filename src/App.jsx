@@ -10,6 +10,7 @@ import {
 import CreatePage from "./pages/CreatePage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -42,6 +43,7 @@ function App() {
           path="/register"
           element={!user ? <Register /> : <Navigate to="/create" />}
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* ✅ Protected main feature route */}
         <Route

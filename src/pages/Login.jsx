@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { account } from "../appwrite/appwriteConfig";
 import { useAuth } from "../context/AuthContext";
 
@@ -17,21 +17,18 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // ✅ Create email/password session
       await account.createEmailPasswordSession(
         emailRef.current.value,
         passwordRef.current.value
       );
 
-      // ✅ Get user and update context
       const loggedInUser = await account.get();
       setUser(loggedInUser);
 
-      // ✅ Redirect to /create
       navigate("/create");
     } catch (err) {
+      console.error("❌ Login error:", err);
       setError("Invalid email or password.");
-      console.error("Login error:", err);
     } finally {
       setLoading(false);
     }
@@ -71,6 +68,16 @@ export default function Login() {
         >
           {loading ? "Logging in..." : "Login"}
         </button>
+
+        {/* 🔗 Navigation Links */}
+        <div className="flex justify-between text-sm text-blue-600 mt-2">
+          <Link to="/register" className="hover:underline">
+            Don’t have an account? Register
+          </Link>
+          <Link to="/forgot-password" className="hover:underline">
+            Forgot Password?
+          </Link>
+        </div>
       </form>
     </div>
   );
