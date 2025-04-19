@@ -66,30 +66,32 @@ export default function CreatePage() {
 
               {/* Style and mood controls */}
               <div className="mt-4 space-y-3">
+                {/* Mood Dropdown */}
                 <select
                   id="mood"
                   value={mood}
                   onChange={(e) => setMood(e.target.value)}
                   className="w-full rounded-md border border-gray-300 bg-white py-2 px-3 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 >
-                  <option value="">🧢 Select a style (optional)</option>
-                  <option value="witty">😆 Witty</option>
-                  <option value="elegant">💎 Elegant</option>
+                  <option value="">🎭 Select a mood (optional)</option>
+                  <option value="funny">😆 Funny</option>
+                  <option value="inspirational">💡 Inspirational</option>
+                  <option value="aesthetic">🎨 Aesthetic</option>
+                  <option value="romantic">💖 Romantic</option>
+                  <option value="sarcastic">🙃 Sarcastic</option>
+                  <option value="edgy">⚡ Edgy</option>
+                  <option value="motivational">🔥 Motivational</option>
+                  <option value="sad">😢 Sad</option>
+                  <option value="celebratory">🎉 Celebratory</option>
+                  <option value="chill">🧘 Chill</option>
+                  <option value="mysterious">🕵️ Mysterious</option>
                   <option value="trendy">📈 Trendy</option>
-                  <option value="professional">🧠 Professional</option>
-                  <option value="casual">😎 Casual</option>
-                  <option value="minimal">🌿 Minimal</option>
+                  <option value="cute">🐾 Cute</option>
                   <option value="bold">💥 Bold</option>
-                  <option value="playful">🎲 Playful</option>
-                  <option value="luxury">👑 Luxury</option>
-                  <option value="grunge">🖤 Grunge</option>
-                  <option value="vintage">📷 Vintage</option>
-                  <option value="youthful">🧃 Youthful</option>
-                  <option value="artsy">🎭 Artsy</option>
-                  <option value="geeky">🤓 Geeky</option>
-                  <option value="clean">🧼 Clean</option>
+                  <option value="vintage">📸 Vintage</option>
                 </select>
 
+                {/* Style Dropdown */}
                 <select
                   id="style"
                   value={style}
@@ -114,6 +116,7 @@ export default function CreatePage() {
                   <option value="clean">🧼 Clean</option>
                 </select>
 
+                {/* Custom Message Input */}
                 <input
                   type="text"
                   value={customMessage}

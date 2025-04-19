@@ -42,7 +42,7 @@ export default function Navbar() {
             to="/saved"
             className={`hover:text-blue-600 ${
               location.pathname === "/saved"
-                ? "text-blue-600 font-semibold "
+                ? "text-blue-600 font-semibold  "
                 : ""
             }`}
           >
