@@ -7,6 +7,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Hide navbar actions on login/register pages
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
 
@@ -18,33 +19,61 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white shadow px-6 py-4 flex justify-between items-center">
-      <Link to="/" className="text-xl font-bold text-blue-600">
+      {/* Left - Logo */}
+      <Link to="/create" className="text-xl font-bold text-blue-600">
         Caption-Pop
       </Link>
 
+      {/* Center - Nav Links (Only when logged in & not on auth pages) */}
       {!isAuthPage && user && (
-        <div className="flex items-center space-x-4">
+        <div className="flex space-x-6 text-gray-700 font-medium">
           <Link
             to="/create"
-            className="text-gray-700 hover:text-blue-600 font-medium"
+            className={`hover:text-blue-600 ${
+              location.pathname === "/create"
+                ? "text-blue-600 font-semibold "
+                : ""
+            }`}
           >
             Create
           </Link>
+
           <Link
             to="/saved"
-            className="text-gray-700 hover:text-blue-600 font-medium"
+            className={`hover:text-blue-600 ${
+              location.pathname === "/saved"
+                ? "text-blue-600 font-semibold "
+                : ""
+            }`}
           >
             Saved
           </Link>
-          <img
-            src={user.avatarUrl}
-            alt="avatar"
-            className="w-8 h-8 rounded-full object-cover border cursor-pointer"
+        </div>
+      )}
+
+      {/* Right - Profile + Logout */}
+      {/* Right - Profile + Logout */}
+      {!isAuthPage && user && (
+        <div className="flex items-center space-x-4">
+          {/* Avatar + Name */}
+          <div
             onClick={() => navigate("/profile")}
-          />
+            className="flex items-center cursor-pointer space-x-2"
+          >
+            <img
+              src={user.avatarUrl}
+              alt="avatar"
+              className="w-8 h-8 rounded-full object-cover border-2 border-blue-500 ring-2 ring-white"
+            />
+            <span className="text-gray-800 font-medium text-sm">
+              {user.name?.split(" ")[0] ?? "User"}
+            </span>
+          </div>
+
+          {/* Logout Link Style */}
           <button
             onClick={handleLogout}
-            className="text-sm bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200"
+            className="text-sm text-red-600 hover:underline cursor-pointer bg-transparent border-none p-0 m-0"
           >
             Logout
           </button>
