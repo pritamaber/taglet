@@ -1,0 +1,8 @@
+{
+  "name": "create-order",
+  "main": "src/main.js",
+  "type": "commonjs",
+  "dependencies": {
+    "razorpay": "^2.9.0"
+  }
+}
