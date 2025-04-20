@@ -27,7 +27,7 @@ export default function Home() {
           transition={{ duration: 0.6 }}
           className="text-5xl sm:text-6xl font-extrabold tracking-tight text-purple-700"
         >
-          Create Viral Captions from Your 📸 Instas
+          Create Viral Captions & Hashtags For Your Social Profiles
         </motion.h1>
 
         <motion.p

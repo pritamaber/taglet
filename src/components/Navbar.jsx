@@ -1,13 +1,15 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { account } from "../appwrite/appwriteConfig";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Navbar() {
   const { user, setUser } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
+  const menuRef = useRef(null);
+  const mobileRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const isAuthPage =
@@ -18,6 +20,37 @@ export default function Navbar() {
     setUser(null);
     navigate("/login");
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const clickedInsideMenu = menuRef.current?.contains(e.target);
+      const clickedInsideMobile = mobileRef.current?.contains(e.target);
+      const clickedHamburger = e.target.closest(
+        "button[aria-label='Toggle Menu']"
+      );
+
+      if (!clickedInsideMenu && !clickedHamburger) {
+        setMenuOpen(false);
+      }
+
+      if (!clickedInsideMobile && !clickedHamburger) {
+        setMobileNavOpen(false);
+      }
+    };
+
+    const handleScroll = () => {
+      setMenuOpen(false);
+      setMobileNavOpen(false);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <nav className="bg-white shadow px-6 py-4">
@@ -34,7 +67,7 @@ export default function Navbar() {
           </h1>
         </Link>
 
-        {/* Desktop Nav Links - visible on md+ */}
+        {/* Desktop Nav Links */}
         {!isAuthPage && user && (
           <div className="hidden md:flex gap-8 text-gray-700 font-medium">
             <Link
@@ -60,32 +93,48 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Mobile Menu Icon */}
+        {/* Mobile Menu Toggle */}
         {user && (
           <button
+            aria-label="Toggle Menu"
             className="md:hidden text-gray-600 focus:outline-none"
             onClick={() => setMobileNavOpen((prev) => !prev)}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4.5 6.75h15m-15 5.25h15m-15 5.25h15"
-              />
-            </svg>
+            {mobileNavOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M6.225 4.811a.75.75 0 011.06 0L12 9.525l4.715-4.714a.75.75 0 111.06 1.06L13.06 10.5l4.714 4.715a.75.75 0 11-1.06 1.06L12 11.56l-4.715 4.715a.75.75 0 01-1.06-1.06L10.94 10.5 6.225 5.785a.75.75 0 010-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 6.75h15m-15 5.25h15m-15 5.25h15"
+                />
+              </svg>
+            )}
           </button>
         )}
 
-        {/* User Avatar + Dropdown */}
+        {/* Avatar Dropdown */}
         {!isAuthPage && user && (
-          <div className="relative ml-4 hidden md:block">
+          <div ref={menuRef} className="relative ml-4 hidden md:block">
             <div
               onClick={() => setMenuOpen((prev) => !prev)}
               className="flex items-center cursor-pointer gap-2"
@@ -101,7 +150,7 @@ export default function Navbar() {
             </div>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow z-10">
+              <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow z-10 transition-transform transform origin-top-right scale-95 animate-dropdown-fade">
                 <Link
                   to="/profile"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -163,7 +212,10 @@ export default function Navbar() {
 
       {/* Mobile Nav Panel */}
       {mobileNavOpen && user && (
-        <div className="md:hidden mt-4 space-y-2 border-t pt-4 text-sm font-medium text-gray-700">
+        <div
+          ref={mobileRef}
+          className="md:hidden mt-4 space-y-2 border-t pt-4 text-sm font-medium text-gray-700 transition-all duration-300 ease-in-out animate-fade-in"
+        >
           <Link
             to="/create"
             onClick={() => setMobileNavOpen(false)}
