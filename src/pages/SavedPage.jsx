@@ -40,27 +40,60 @@ export default function SavedPage() {
     );
   });
 
+  // Emoji-enhanced options for filters
+  const moodOptions = [
+    { label: "😆 Funny", value: "funny" },
+    { label: "💡 Inspirational", value: "inspirational" },
+    { label: "🎨 Aesthetic", value: "aesthetic" },
+    { label: "💖 Romantic", value: "romantic" },
+    { label: "🔥 Motivational", value: "motivational" },
+    { label: "💥 Bold", value: "bold" },
+    { label: "📈 Trendy", value: "trendy" },
+    { label: "🐾 Cute", value: "cute" },
+    { label: "💅 Sassy", value: "sassy" },
+    { label: "🕰️ Nostalgic", value: "nostalgic" },
+    { label: "⚡ Edgy", value: "edgy" },
+    { label: "🧘 Calm", value: "calm" },
+    { label: "🕵️ Mysterious", value: "mysterious" },
+    { label: "🎉 Celebratory", value: "celebratory" },
+    { label: "😢 Emotional", value: "emotional" },
+  ];
+
+  const styleOptions = [
+    { label: "😆 Witty", value: "witty" },
+    { label: "💎 Elegant", value: "elegant" },
+    { label: "🌿 Minimal", value: "minimal" },
+    { label: "🧼 Clean", value: "clean" },
+    { label: "🧠 Professional", value: "professional" },
+    { label: "👑 Luxury", value: "luxury" },
+    { label: "📸 Vintage", value: "vintage" },
+    { label: "🎲 Playful", value: "playful" },
+    { label: "🙃 Sarcastic", value: "sarcastic" },
+    { label: "🖤 Dark", value: "dark" },
+    { label: "🧃 Youthful", value: "youthful" },
+    { label: "🎭 Artsy", value: "artsy" },
+    { label: "📈 Trendy", value: "trendy" },
+    { label: "💬 Relatable", value: "relatable" },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4 py-10">
       <h1 className="text-4xl font-extrabold text-purple-700 mb-8 text-center">
         📁 Your Saved Captions
       </h1>
 
-      <div className="flex gap-4 justify-center mb-8">
+      <div className="flex flex-wrap gap-4 justify-center mb-8">
         <select
           value={filterMood}
           onChange={(e) => setFilterMood(e.target.value)}
           className="border border-purple-300 bg-white text-sm px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
         >
           <option value="">🎭 Filter by mood</option>
-          <option value="funny">😆 Funny</option>
-          <option value="inspirational">💡 Inspirational</option>
-          <option value="aesthetic">🎨 Aesthetic</option>
-          <option value="romantic">💖 Romantic</option>
-          <option value="motivational">🔥 Motivational</option>
-          <option value="cute">🐾 Cute</option>
-          <option value="bold">💥 Bold</option>
-          <option value="vintage">📸 Vintage</option>
+          {moodOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
 
         <select
@@ -69,12 +102,24 @@ export default function SavedPage() {
           className="border border-purple-300 bg-white text-sm px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
         >
           <option value="">🧢 Filter by style</option>
-          <option value="witty">😆 Witty</option>
-          <option value="elegant">💎 Elegant</option>
-          <option value="clean">🧼 Clean</option>
-          <option value="minimal">🌿 Minimal</option>
-          <option value="professional">🧠 Professional</option>
+          {styleOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
+
+        {(filterMood || filterStyle) && (
+          <button
+            onClick={() => {
+              setFilterMood("");
+              setFilterStyle("");
+            }}
+            className="text-sm text-purple-700 bg-purple-100 px-4 py-2 rounded-md hover:bg-purple-200 transition"
+          >
+            🔄 All Posts
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -88,8 +133,10 @@ export default function SavedPage() {
       ) : (
         <div className="grid gap-6 max-w-4xl mx-auto">
           {filteredPosts.map((post) => (
-            <div className="flex items-start gap-4 bg-white p-4 rounded-xl shadow border border-purple-200">
-              {/* Thumbnail on the left */}
+            <div
+              key={post.$id}
+              className="flex items-start gap-4 bg-white p-4 rounded-xl shadow border border-purple-200"
+            >
               {post.imageUrl && (
                 <img
                   src={post.imageUrl}
@@ -98,7 +145,6 @@ export default function SavedPage() {
                 />
               )}
 
-              {/* Caption + Hashtags on the right */}
               <div className="flex-1">
                 <p className="text-gray-800 mb-1 whitespace-pre-wrap">
                   <strong>📝 Caption:</strong> {post.caption}
@@ -106,7 +152,6 @@ export default function SavedPage() {
                 <p className="text-purple-700 text-sm break-words">
                   <strong>🏷️ Hashtags:</strong> {post.hashtags}
                 </p>
-
                 <div className="flex justify-between text-xs text-gray-500 mt-2">
                   {post.mood && <span>🎭 {post.mood}</span>}
                   {post.style && <span>🧢 {post.style}</span>}
@@ -114,7 +159,6 @@ export default function SavedPage() {
                 </div>
               </div>
 
-              {/* Delete button in top-right */}
               <button
                 onClick={() => handleDelete(post.$id)}
                 className="text-red-500 text-xs hover:underline"

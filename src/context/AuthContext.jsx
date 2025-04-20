@@ -20,8 +20,6 @@ export const AuthProvider = ({ children }) => {
         [Query.equal("email", sessionUser.email)]
       );
 
-      console.log(result.documents[0]);
-
       setUser(result.documents[0]);
     } catch (err) {
       console.warn("❌ Failed to fetch user profile", err.message);
