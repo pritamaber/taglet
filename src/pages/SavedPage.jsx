@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 export default function SavedPage() {
   const { user } = useAuth();
-  const { savePost, fetchSavedPosts, deletePost, handleDelete } = useSaved();
+  const { fetchSavedPosts, handleDelete } = useSaved();
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);

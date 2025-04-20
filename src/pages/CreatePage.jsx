@@ -1,8 +1,6 @@
 import { useRef } from "react";
 import { toast } from "react-hot-toast";
 import useCreatePage from "../hooks/useCreatePage";
-import { useSaved } from "../hooks/useSaved.jsx";
-import { useAuth } from "../context/AuthContext";
 
 export default function CreatePage() {
   const fileInputRef = useRef(null);
@@ -24,38 +22,9 @@ export default function CreatePage() {
     copyAll,
     isReel,
     setIsReel,
-    uploadCompressedImage,
+    handleSave,
   } = useCreatePage(fileInputRef);
 
-  const { savePost } = useSaved();
-  const { user } = useAuth();
-
-  const handleSave = async () => {
-    if (!user || !caption || !hashtags) {
-      toast("⚠️ Cannot save: Missing caption or user.");
-      return;
-    }
-
-    const imageUrl = await uploadCompressedImage();
-
-    // ✅ Trim hashtags to 15 max to avoid Appwrite 255-char limit
-    const trimmedHashtags = hashtags.split(" ").slice(0, 15).join(" ");
-
-    const result = await savePost({
-      userId: user.$id,
-      caption,
-      hashtags: trimmedHashtags,
-      mood,
-      style,
-      imageUrl,
-    });
-
-    if (result.success) {
-      toast.success("✅ Saved successfully!");
-    } else {
-      toast.error("❌ Failed to save");
-    }
-  };
   // Mood and style dropdown options with emojis
   const moodOptions = [
     { label: "😆 Funny", value: "funny" },

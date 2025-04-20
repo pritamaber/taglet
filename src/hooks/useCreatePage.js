@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { describeImage } from "../ai/describeImage";
 import imageCompression from "browser-image-compression";
 import { storage, ID } from "../appwrite/appwriteConfig";
-
+import { useSaved } from "../hooks/useSaved.jsx";
+import { useAuth } from "../context/AuthContext";
 /**
  * Custom hook to manage caption generation logic for Taglet.
  * Supports image upload, AI captioning, typing animation, and Appwrite image compression/upload.
@@ -23,6 +25,11 @@ export default function useCreatePage(fileInputRef) {
   const [displayedCaption, setDisplayedCaption] = useState("");
   const [hashtags, setHashtags] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // === Import variable to facilate save post ===
+
+  const { savePost } = useSaved();
+  const { user } = useAuth();
 
   /**
    * Handle file input from user
@@ -117,6 +124,35 @@ export default function useCreatePage(fileInputRef) {
     }
   };
 
+  //  Function to save the post at CreatePage.jsx
+
+  const handleSave = async () => {
+    if (!user || !caption || !hashtags) {
+      toast("⚠️ Cannot save: Missing caption or user.");
+      return;
+    }
+
+    const imageUrl = await uploadCompressedImage();
+
+    // ✅ Trim hashtags to 15 max to avoid Appwrite 255-char limit
+    const trimmedHashtags = hashtags.split(" ").slice(0, 15).join(" ");
+
+    const result = await savePost({
+      userId: user.$id,
+      caption,
+      hashtags: trimmedHashtags,
+      mood,
+      style,
+      imageUrl,
+    });
+
+    if (result.success) {
+      toast.success("✅ Saved successfully!");
+    } else {
+      toast.error("❌ Failed to save");
+    }
+  };
+
   /**
    * Copy final caption and hashtags to clipboard
    */
@@ -151,6 +187,7 @@ export default function useCreatePage(fileInputRef) {
     handleGenerateCaptions,
     clearImage,
     copyAll,
-    uploadCompressedImage, // ✅ Now available for use when saving
+    uploadCompressedImage,
+    handleSave,
   };
 }
