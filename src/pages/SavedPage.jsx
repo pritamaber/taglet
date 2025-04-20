@@ -21,7 +21,6 @@ export default function SavedPage() {
     loadSaved();
   }, [user]);
 
-  // Handle delete
   const handleDelete = async (id) => {
     const confirmed = confirm("Are you sure you want to delete this post?");
     if (!confirmed) return;
@@ -34,7 +33,6 @@ export default function SavedPage() {
     }
   };
 
-  // Filtered list
   const filteredPosts = posts.filter((post) => {
     return (
       (!filterMood || post.mood === filterMood) &&
@@ -43,31 +41,23 @@ export default function SavedPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        📁 Saved Captions
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4 py-10">
+      <h1 className="text-4xl font-extrabold text-purple-700 mb-8 text-center">
+        📁 Your Saved Captions
       </h1>
 
-      {/* Filters */}
-      <div className="flex gap-4 justify-center mb-6">
+      <div className="flex gap-4 justify-center mb-8">
         <select
           value={filterMood}
           onChange={(e) => setFilterMood(e.target.value)}
-          className="border rounded px-3 py-2 text-sm"
+          className="border border-purple-300 bg-white text-sm px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
         >
-          <option value="">🎭 Select a mood (optional)</option>
+          <option value="">🎭 Filter by mood</option>
           <option value="funny">😆 Funny</option>
           <option value="inspirational">💡 Inspirational</option>
           <option value="aesthetic">🎨 Aesthetic</option>
           <option value="romantic">💖 Romantic</option>
-          <option value="sarcastic">🙃 Sarcastic</option>
-          <option value="edgy">⚡ Edgy</option>
           <option value="motivational">🔥 Motivational</option>
-          <option value="sad">😢 Sad</option>
-          <option value="celebratory">🎉 Celebratory</option>
-          <option value="chill">🧘 Chill</option>
-          <option value="mysterious">🕵️ Mysterious</option>
-          <option value="trendy">📈 Trendy</option>
           <option value="cute">🐾 Cute</option>
           <option value="bold">💥 Bold</option>
           <option value="vintage">📸 Vintage</option>
@@ -76,51 +66,44 @@ export default function SavedPage() {
         <select
           value={filterStyle}
           onChange={(e) => setFilterStyle(e.target.value)}
-          className="border rounded px-3 py-2 text-sm"
+          className="border border-purple-300 bg-white text-sm px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
         >
-          <option value="">🧢 Select a style (optional)</option>
+          <option value="">🧢 Filter by style</option>
           <option value="witty">😆 Witty</option>
           <option value="elegant">💎 Elegant</option>
-          <option value="trendy">📈 Trendy</option>
-          <option value="professional">🧠 Professional</option>
-          <option value="casual">😎 Casual</option>
-          <option value="minimal">🌿 Minimal</option>
-          <option value="bold">💥 Bold</option>
-          <option value="playful">🎲 Playful</option>
-          <option value="luxury">👑 Luxury</option>
-          <option value="grunge">🖤 Grunge</option>
-          <option value="vintage">📷 Vintage</option>
-          <option value="youthful">🧃 Youthful</option>
-          <option value="artsy">🎭 Artsy</option>
-          <option value="geeky">🤓 Geeky</option>
           <option value="clean">🧼 Clean</option>
+          <option value="minimal">🌿 Minimal</option>
+          <option value="professional">🧠 Professional</option>
         </select>
       </div>
 
       {loading ? (
-        <p className="text-center text-gray-500">Loading your saved posts...</p>
+        <p className="text-center text-purple-600 text-sm">
+          Loading your saved posts...
+        </p>
       ) : filteredPosts.length === 0 ? (
-        <p className="text-center text-gray-600">No matching results found.</p>
+        <p className="text-center text-gray-600 text-sm">
+          No matching results found.
+        </p>
       ) : (
         <div className="grid gap-6 max-w-4xl mx-auto">
           {filteredPosts.map((post) => (
             <div
               key={post.$id}
-              className="bg-white p-6 rounded-lg shadow border relative"
+              className="bg-white p-6 rounded-xl shadow-lg border border-purple-200 relative"
             >
-              <p className="text-gray-700 mb-2 whitespace-pre-wrap">
+              <p className="text-gray-800 mb-2 whitespace-pre-wrap">
                 <strong>📝 Caption:</strong> {post.caption}
               </p>
-              <p className="text-blue-700 text-sm break-words">
+              <p className="text-purple-700 text-sm break-words">
                 <strong>🏷️ Hashtags:</strong> {post.hashtags}
               </p>
-              <div className="flex justify-between text-sm text-gray-500 mt-2">
-                {post.mood && <span>🎭 Mood: {post.mood}</span>}
-                {post.style && <span>🧢 Style: {post.style}</span>}
+              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                {post.mood && <span>🎭 {post.mood}</span>}
+                {post.style && <span>🧢 {post.style}</span>}
                 <span>🕒 {new Date(post.createdAt).toLocaleString()}</span>
               </div>
 
-              {/* 🗑️ Delete Button */}
               <button
                 onClick={() => handleDelete(post.$id)}
                 className="absolute top-2 right-2 text-red-500 text-sm hover:underline"
