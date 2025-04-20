@@ -1,6 +1,7 @@
 import { useRef } from "react";
+import { toast } from "react-hot-toast";
 import useCreatePage from "../hooks/useCreatePage";
-import { useSaved } from "../hooks/useSaved";
+import { useSaved } from "../hooks/useSaved.jsx";
 import { useAuth } from "../context/AuthContext";
 
 export default function CreatePage() {
@@ -31,7 +32,7 @@ export default function CreatePage() {
 
   const handleSave = async () => {
     if (!user || !caption || !hashtags) {
-      alert("⚠️ Cannot save: Missing caption or user.");
+      toast("⚠️ Cannot save: Missing caption or user.");
       return;
     }
 
@@ -50,9 +51,9 @@ export default function CreatePage() {
     });
 
     if (result.success) {
-      alert("✅ Saved successfully!");
+      toast.success("✅ Saved successfully!");
     } else {
-      alert("❌ Failed to save: " + result.error);
+      toast.error("❌ Failed to save");
     }
   };
   // Mood and style dropdown options with emojis

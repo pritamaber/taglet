@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
+
+// Toast
+import { Toaster } from "react-hot-toast";
 
 // Pages
 import CreatePage from "./pages/CreatePage";
@@ -15,7 +19,8 @@ import Profile from "./pages/Profile";
 import SavedPage from "./pages/SavedPage";
 import Settings from "./pages/Settings";
 import PlanPage from "./pages/PlanPage";
-import Home from "./pages/Home";
+import LandingPage from "./pages/LandingPage";
+import Feedback from "./pages/Feedback";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -24,32 +29,47 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // Auth context
 import { useAuth } from "./context/AuthContext";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function App() {
   const { user, loading } = useAuth();
 
-  // ⏳ Wait for auth status to load before rendering anything
   if (loading) return null;
 
   return (
     <Router>
+      <Toaster position="top-center" reverseOrder={false} />
+      <ScrollToTop />
       <Navbar />
 
       <Routes>
-        {/* 👤 Public home or redirect if logged in */}
-        <Route path="/" element={user ? <Navigate to="/create" /> : <Home />} />
+        {/* 🚀 Landing Page by default if not logged in */}
+        <Route
+          path="/"
+          element={user ? <Navigate to="/create" /> : <LandingPage />}
+        />
+
+        {/* {Feedbackroute} */}
+        <Route path="/feedback" element={<Feedback />} />
 
         {/* Auth Pages */}
         <Route
           path="/login"
-          element={!user ? <Login /> : <Navigate to="/create" />}
+          element={!user ? <Login /> : <Navigate to="/create" replace />}
         />
         <Route
           path="/register"
-          element={!user ? <Register /> : <Navigate to="/create" />}
+          element={!user ? <Register /> : <Navigate to="/create" replace />}
         />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected Routes */}
+        {/* Protected Pages */}
         <Route
           path="/create"
           element={

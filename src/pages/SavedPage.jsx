@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 export default function SavedPage() {
   const { user } = useAuth();
-  const { fetchSavedPosts, deletePost } = useSaved();
+  const { savePost, fetchSavedPosts, deletePost, handleDelete } = useSaved();
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,18 +22,6 @@ export default function SavedPage() {
     };
     loadSaved();
   }, [user]);
-
-  const handleDelete = async (id) => {
-    const confirmed = confirm("Are you sure you want to delete this post?");
-    if (!confirmed) return;
-
-    const result = await deletePost(id);
-    if (result.success) {
-      setPosts((prev) => prev.filter((post) => post.$id !== id));
-    } else {
-      alert("Failed to delete: " + result.error);
-    }
-  };
 
   const filteredPosts = posts
     .filter((post) => {
@@ -195,7 +183,7 @@ export default function SavedPage() {
               </div>
 
               <button
-                onClick={() => handleDelete(post.$id)}
+                onClick={() => handleDelete(post.$id, setPosts)}
                 className="text-red-500 text-xs hover:underline"
               >
                 Delete

@@ -1,5 +1,6 @@
 import { databases, ID } from "../appwrite/appwriteConfig";
 import { Query } from "appwrite";
+import { toast } from "react-hot-toast";
 
 /**
  * Hook to handle saving, fetching, and deleting saved caption posts.
@@ -76,5 +77,34 @@ export const useSaved = () => {
     }
   };
 
-  return { savePost, fetchSavedPosts, deletePost };
+  // Handle delete posts
+  const handleDelete = async (id, setPosts) => {
+    toast(
+      (t) => (
+        <span className="text-sm">
+          Are you sure you want to delete?
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id); // Close the confirmation toast
+              const result = await deletePost(id);
+              if (result.success) {
+                setPosts((prev) => prev.filter((post) => post.$id !== id));
+                toast.success("✅ Deleted successfully!");
+              } else {
+                toast.error("❌ Failed to delete: " + result.error);
+              }
+            }}
+            className="ml-3 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded-full"
+          >
+            Yes, Delete
+          </button>
+        </span>
+      ),
+      {
+        duration: 5000,
+      }
+    );
+  };
+
+  return { savePost, fetchSavedPosts, deletePost, handleDelete };
 };
