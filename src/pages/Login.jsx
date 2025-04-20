@@ -50,7 +50,7 @@ export default function Login() {
         className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-5"
       >
         <h2 className="text-2xl font-bold text-center text-gray-800">
-          Login to Caption-Pop
+          Login to # taglet
         </h2>
 
         {/* Email Field */}

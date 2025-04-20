@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import SavedPage from "./pages/SavedPage";
 import Settings from "./pages/Settings";
 import PlanPage from "./pages/PlanPage";
+import Home from "./pages/Home";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -31,14 +32,13 @@ function App() {
 
   return (
     <Router>
-      {/* Global Navbar appears on all routes */}
       <Navbar />
 
       <Routes>
-        {/* 🌐 Redirect root path to /create */}
-        <Route path="/" element={<Navigate to="/create" />} />
+        {/* 👤 Public home or redirect if logged in */}
+        <Route path="/" element={user ? <Navigate to="/create" /> : <Home />} />
 
-        {/* 🔐 Auth pages (only visible to unauthenticated users) */}
+        {/* Auth Pages */}
         <Route
           path="/login"
           element={!user ? <Login /> : <Navigate to="/create" />}
@@ -49,7 +49,7 @@ function App() {
         />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* ✅ Protected main feature route */}
+        {/* Protected Routes */}
         <Route
           path="/create"
           element={
@@ -58,7 +58,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* ✅ Protected profile route */}
         <Route
           path="/profile"
           element={
@@ -67,8 +66,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* 🔐 Protected /saved page (placeholder for now) */}
         <Route
           path="/saved"
           element={
@@ -77,7 +74,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/settings"
           element={
@@ -95,7 +91,7 @@ function App() {
           }
         />
 
-        {/* 🚫 Catch-all 404 route */}
+        {/* Fallback 404 */}
         <Route
           path="*"
           element={
