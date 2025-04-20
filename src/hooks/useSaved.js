@@ -1,8 +1,22 @@
 import { databases, ID } from "../appwrite/appwriteConfig";
 import { Query } from "appwrite";
 
+/**
+ * Hook to handle saving, fetching, and deleting saved caption posts.
+ * Supports imageUrl for previewing saved image content.
+ */
 export const useSaved = () => {
-  const savePost = async ({ userId, caption, hashtags, mood, style }) => {
+  /**
+   * Save a post to Appwrite DB with optional image preview URL
+   */
+  const savePost = async ({
+    userId,
+    caption,
+    hashtags,
+    mood,
+    style,
+    imageUrl,
+  }) => {
     try {
       const createdAt = new Date().toISOString();
 
@@ -16,6 +30,7 @@ export const useSaved = () => {
           hashtags,
           mood,
           style,
+          imageUrl, // ✅ Save the compressed preview image URL
           createdAt,
         }
       );
@@ -27,6 +42,9 @@ export const useSaved = () => {
     }
   };
 
+  /**
+   * Fetch saved posts for a specific user
+   */
   const fetchSavedPosts = async (userId) => {
     try {
       const response = await databases.listDocuments(
@@ -41,6 +59,10 @@ export const useSaved = () => {
       return [];
     }
   };
+
+  /**
+   * Delete a saved post by its ID
+   */
   const deletePost = async (postId) => {
     try {
       await databases.deleteDocument(

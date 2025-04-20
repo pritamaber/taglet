@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { describeImage } from "../ai/describeImage";
+import imageCompression from "browser-image-compression";
+import { storage, ID } from "../appwrite/appwriteConfig";
 
 /**
  * Custom hook to manage caption generation logic for Taglet.
- * Supports image upload, AI captioning, typing animation, and state management.
+ * Supports image upload, AI captioning, typing animation, and Appwrite image compression/upload.
  */
 export default function useCreatePage(fileInputRef) {
   // === Upload State ===
@@ -14,7 +16,7 @@ export default function useCreatePage(fileInputRef) {
   const [mood, setMood] = useState("");
   const [style, setStyle] = useState("");
   const [customMessage, setCustomMessage] = useState("");
-  const [isReel, setIsReel] = useState(false); // ✅ Reel support toggle
+  const [isReel, setIsReel] = useState(false); // Reel support toggle
 
   // === Output State ===
   const [caption, setCaption] = useState("");
@@ -46,6 +48,42 @@ export default function useCreatePage(fileInputRef) {
   };
 
   /**
+   * Upload a compressed image to Appwrite bucket and return its preview URL
+   */
+  const uploadCompressedImage = async () => {
+    if (!file) return null;
+
+    try {
+      const compressed = await imageCompression(file, {
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+      });
+
+      // ✅ Wrap blob into a File with a filename
+      const compressedFile = new File([compressed], file.name, {
+        type: file.type,
+      });
+
+      const uploaded = await storage.createFile(
+        import.meta.env.VITE_APPWRITE_BUCKET_ID_CAPTION_IMAGES,
+        ID.unique(),
+        compressedFile
+      );
+
+      const imageUrl = storage.getFilePreview(
+        import.meta.env.VITE_APPWRITE_BUCKET_ID_CAPTION_IMAGES,
+        uploaded.$id
+      );
+
+      return imageUrl;
+    } catch (err) {
+      console.error("❌ Image compression/upload failed:", err);
+      return null;
+    }
+  };
+
+  /**
    * Call the backend AI function to generate captions and hashtags
    */
   const handleGenerateCaptions = async () => {
@@ -54,19 +92,17 @@ export default function useCreatePage(fileInputRef) {
     setDisplayedCaption("");
 
     try {
-      // 🧠 Call AI service (pass isReel flag to influence prompt)
       const result = await describeImage({
         file,
         mood,
         style,
         customMessage,
-        isReel, // ✅ Include reel context
+        isReel,
       });
 
       setCaption(result.caption);
       setHashtags(result.hashtags);
 
-      // ✨ Typing animation
       let index = 0;
       const interval = setInterval(() => {
         setDisplayedCaption((prev) => prev + result.caption.charAt(index));
@@ -115,5 +151,6 @@ export default function useCreatePage(fileInputRef) {
     handleGenerateCaptions,
     clearImage,
     copyAll,
+    uploadCompressedImage, // ✅ Now available for use when saving
   };
 }

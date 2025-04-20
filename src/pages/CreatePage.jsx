@@ -23,6 +23,7 @@ export default function CreatePage() {
     copyAll,
     isReel,
     setIsReel,
+    uploadCompressedImage,
   } = useCreatePage(fileInputRef);
 
   const { savePost } = useSaved();
@@ -34,12 +35,18 @@ export default function CreatePage() {
       return;
     }
 
+    const imageUrl = await uploadCompressedImage();
+
+    // ✅ Trim hashtags to 15 max to avoid Appwrite 255-char limit
+    const trimmedHashtags = hashtags.split(" ").slice(0, 15).join(" ");
+
     const result = await savePost({
       userId: user.$id,
       caption,
-      hashtags,
+      hashtags: trimmedHashtags,
       mood,
       style,
+      imageUrl,
     });
 
     if (result.success) {
@@ -48,7 +55,6 @@ export default function CreatePage() {
       alert("❌ Failed to save: " + result.error);
     }
   };
-
   // Mood and style dropdown options with emojis
   const moodOptions = [
     { label: "😆 Funny", value: "funny" },

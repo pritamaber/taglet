@@ -88,25 +88,36 @@ export default function SavedPage() {
       ) : (
         <div className="grid gap-6 max-w-4xl mx-auto">
           {filteredPosts.map((post) => (
-            <div
-              key={post.$id}
-              className="bg-white p-6 rounded-xl shadow-lg border border-purple-200 relative"
-            >
-              <p className="text-gray-800 mb-2 whitespace-pre-wrap">
-                <strong>📝 Caption:</strong> {post.caption}
-              </p>
-              <p className="text-purple-700 text-sm break-words">
-                <strong>🏷️ Hashtags:</strong> {post.hashtags}
-              </p>
-              <div className="flex justify-between text-xs text-gray-500 mt-2">
-                {post.mood && <span>🎭 {post.mood}</span>}
-                {post.style && <span>🧢 {post.style}</span>}
-                <span>🕒 {new Date(post.createdAt).toLocaleString()}</span>
+            <div className="flex items-start gap-4 bg-white p-4 rounded-xl shadow border border-purple-200">
+              {/* Thumbnail on the left */}
+              {post.imageUrl && (
+                <img
+                  src={post.imageUrl}
+                  alt="Preview"
+                  className="w-24 h-24 object-cover rounded border"
+                />
+              )}
+
+              {/* Caption + Hashtags on the right */}
+              <div className="flex-1">
+                <p className="text-gray-800 mb-1 whitespace-pre-wrap">
+                  <strong>📝 Caption:</strong> {post.caption}
+                </p>
+                <p className="text-purple-700 text-sm break-words">
+                  <strong>🏷️ Hashtags:</strong> {post.hashtags}
+                </p>
+
+                <div className="flex justify-between text-xs text-gray-500 mt-2">
+                  {post.mood && <span>🎭 {post.mood}</span>}
+                  {post.style && <span>🧢 {post.style}</span>}
+                  <span>🕒 {new Date(post.createdAt).toLocaleString()}</span>
+                </div>
               </div>
 
+              {/* Delete button in top-right */}
               <button
                 onClick={() => handleDelete(post.$id)}
-                className="absolute top-2 right-2 text-red-500 text-sm hover:underline"
+                className="text-red-500 text-xs hover:underline"
               >
                 Delete
               </button>
