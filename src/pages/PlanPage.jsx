@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { usePlanPage } from "../hooks/usePlanPage";
-import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 export default function PlanPage() {
   const { user } = useAuth();
@@ -83,6 +83,12 @@ export default function PlanPage() {
               >
                 {plan.price === 0 ? "Already Active" : "Buy Now"}
               </button>
+              <p className="text-xs text-gray-400 mt-2 text-center">
+                Refunds are not guaranteed. See our{" "}
+                <Link to="/refunds" className="underline text-purple-500">
+                  refund policy
+                </Link>
+              </p>
             </div>
           ))}
           <p className="text-center text-xs text-gray-500 mt-4">
@@ -92,12 +98,13 @@ export default function PlanPage() {
 
         <p className="text-center text-sm text-gray-600 mt-10">
           Need more credits or want a custom plan?{" "}
-          <a
-            href="mailto:support@taglet.in"
-            className="text-purple-600 hover:underline"
-          >
-            Contact Support
-          </a>
+          <Link to="/support" className="text-purple-600 hover:underline">
+            Contact Us
+          </Link>{" "}
+          or{" "}
+          <Link to="/refunds" className="text-purple-600 hover:underline">
+            Request a Refund
+          </Link>
         </p>
       </div>
     </div>

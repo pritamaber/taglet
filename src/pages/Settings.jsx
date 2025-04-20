@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Settings() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4">
@@ -8,10 +10,14 @@ export default function Settings() {
           preferences here.
         </p>
         <p className="text-purple-500 text-xs mt-2">
-          Got a suggestion? Email us at{" "}
+          Got a suggestion?{" "}
           <a href="mailto:support@taglet.in" className="underline">
-            support@taglet.in
-          </a>
+            Email us
+          </a>{" "}
+          or{" "}
+          <Link to="/support" className="underline">
+            submit a support request
+          </Link>
         </p>
       </div>
     </div>

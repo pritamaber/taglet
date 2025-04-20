@@ -22,6 +22,9 @@ import PlanPage from "./pages/PlanPage";
 import LandingPage from "./pages/LandingPage";
 import Feedback from "./pages/Feedback";
 import TransactionPage from "./pages/TransactionPage";
+import RefundPage from "./pages/RefundPage";
+import SupportPage from "./pages/SupportPage";
+import TermsPage from "./pages/TermsPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -119,7 +122,30 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/refunds"
+          element={
+            <ProtectedRoute>
+              <RefundPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/support"
+          element={
+            <ProtectedRoute>
+              <SupportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/terms"
+          element={
+            <ProtectedRoute>
+              <TermsPage />
+            </ProtectedRoute>
+          }
+        />
         {/* Fallback 404 */}
         <Route
           path="*"

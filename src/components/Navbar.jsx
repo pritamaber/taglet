@@ -62,7 +62,7 @@ export default function Navbar() {
               #
             </span>
             <span className="text-purple-500 hover:text-purple-400 hover:tracking-wider transition-all">
-              taglet
+              taglet.in
             </span>
           </h1>
         </Link>
