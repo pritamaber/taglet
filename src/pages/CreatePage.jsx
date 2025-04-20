@@ -1,9 +1,9 @@
-import { useRef } from "react";
-import { toast } from "react-hot-toast";
+import { useRef, useState } from "react";
 import useCreatePage from "../hooks/useCreatePage";
 
 export default function CreatePage() {
   const fileInputRef = useRef(null);
+  const [saving, setSaving] = useState(false);
 
   const {
     image,
@@ -211,9 +211,41 @@ export default function CreatePage() {
                     <div className="mt-4">
                       <button
                         onClick={handleSave}
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm"
+                        disabled={saving}
+                        className={`w-full flex items-center justify-center gap-2 text-white px-4 py-2 rounded shadow text-sm transition duration-150
+    ${
+      saving
+        ? "bg-green-400 cursor-not-allowed"
+        : "bg-green-600 active:scale-95"
+    }
+  `}
                       >
-                        💾 Save this post
+                        {saving ? (
+                          <>
+                            <svg
+                              className="w-4 h-4 animate-spin"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
+                              ></path>
+                            </svg>
+                            Saving...
+                          </>
+                        ) : (
+                          <>💾 Save this post</>
+                        )}
                       </button>
                     </div>
                   )}
