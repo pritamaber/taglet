@@ -2,6 +2,21 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export default function Home() {
+  const samples = [
+    {
+      url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+      caption: "Chasing sunsets 🌅",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80",
+      caption: "Feeling fabulous ✨",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+      caption: "Colors of life 🎨",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 text-gray-800">
       {/* === Hero Section === */}
@@ -86,77 +101,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* === Preview Slideshow Section === */}
+      {/* === Preview Section === */}
       <section className="bg-white py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-purple-700 mb-6">
             🔥 Sample Captions
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                id: "photo-1507525428034-b723cf961d3e",
-                caption: "Chasing sunsets 🌅",
-              },
-              {
-                id: "photo-1494526585095-c41746248156",
-                caption: "Feeling fabulous ✨",
-              },
-              {
-                id: "photo-1506744038136-46273834b3fb",
-                caption: "Colors of life 🎨",
-              },
-            ]
-              .map((item, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-xl overflow-hidden shadow-lg border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50"
-                >
-                  <img
-                    src={`https://images.unsplash.com/${item.id}?auto=format&fit=crop&w=600&q=80`}
-                    alt="Sample"
-                    className="w-full h-60 object-cover"
-                  />
-                  <div className="p-4 text-left">
-                    <p className="text-gray-800 italic mb-2">
-                      "{item.caption}"
-                    </p>
-                    <p className="text-sm text-purple-700">
-                      #vibes #captionmagic #taglet #aiinstagram #aestheticfeed
-                      #genzenergy #viralpost #instagoals
-                    </p>
-                  </div>
+            {samples.map((item, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl overflow-hidden shadow-lg border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50"
+              >
+                <img
+                  src={item.url}
+                  alt={item.caption}
+                  className="w-full h-60 object-cover"
+                />
+                <div className="p-4 text-left">
+                  <p className="text-gray-800 italic mb-2">"{item.caption}"</p>
+                  <p className="text-sm text-purple-700">
+                    #vibes #captionmagic #taglet #aiinstagram #aestheticfeed
+                    #genzenergy #viralpost #instagoals
+                  </p>
                 </div>
-              ))
-              .map((id, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-xl overflow-hidden shadow-lg border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50"
-                >
-                  <img
-                    src={`https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&q=80`}
-                    alt="Sample"
-                    className="w-full h-60 object-cover"
-                  />
-                  <div className="p-4 text-left">
-                    <p className="text-gray-800 italic mb-2">
-                      "
-                      {
-                        [
-                          "Chasing sunsets 🌅",
-                          "Feeling fabulous ✨",
-                          "Colors of life 🎨",
-                        ][idx]
-                      }
-                      "
-                    </p>
-                    <p className="text-sm text-purple-700">
-                      #vibes #captionmagic #taglet #aiinstagram #aestheticfeed
-                      #genzenergy #viralpost #instagoals
-                    </p>
-                  </div>
-                </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -172,6 +142,15 @@ export default function Home() {
         >
           taglet.in
         </a>
+        <div className="mt-2">
+          📬 For any issues, email us at{" "}
+          <a
+            href="mailto:support@taglet.in"
+            className="text-purple-600 underline"
+          >
+            support@taglet.in
+          </a>
+        </div>
       </footer>
     </div>
   );
