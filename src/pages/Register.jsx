@@ -63,62 +63,95 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-5"
+        className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full space-y-6"
       >
-        <h2 className="text-2xl font-bold text-center text-gray-800">
-          Register to Caption-Pop
+        <h2 className="text-3xl font-extrabold text-center text-purple-700">
+          👋 Join Taglet
         </h2>
+        <p className="text-center text-gray-500 text-sm">
+          Create your account and start posting 🔥
+        </p>
 
-        <input
-          ref={nameRef}
-          type="text"
-          placeholder="Name"
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          ref={emailRef}
-          type="email"
-          placeholder="Email"
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          ref={passwordRef}
-          type="password"
-          placeholder="Password"
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          ref={confirmPasswordRef}
-          type="password"
-          placeholder="Confirm Password"
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          ref={avatarRef}
-          type="file"
-          accept="image/*"
-          onChange={handleAvatarChange}
-          required
-          className="w-full text-sm"
-        />
-
-        {preview && (
-          <img
-            src={preview}
-            alt="Avatar Preview"
-            className="w-20 h-20 rounded-full object-cover mx-auto mt-2 border"
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            🧑 Name
+          </label>
+          <input
+            ref={nameRef}
+            type="text"
+            placeholder="Your name"
+            required
+            className="w-full border border-purple-200 px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
           />
-        )}
+        </div>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        {success && <p className="text-green-600 text-sm">{success}</p>}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            📧 Email
+          </label>
+          <input
+            ref={emailRef}
+            type="email"
+            placeholder="you@example.com"
+            required
+            className="w-full border border-purple-200 px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            🔒 Password
+          </label>
+          <input
+            ref={passwordRef}
+            type="password"
+            placeholder="••••••••"
+            required
+            className="w-full border border-purple-200 px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            🔁 Confirm Password
+          </label>
+          <input
+            ref={confirmPasswordRef}
+            type="password"
+            placeholder="••••••••"
+            required
+            className="w-full border border-purple-200 px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            🖼️ Avatar
+          </label>
+          <input
+            ref={avatarRef}
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            required
+            className="w-full text-sm text-gray-600"
+          />
+          {preview && (
+            <img
+              src={preview}
+              alt="Avatar Preview"
+              className="w-20 h-20 rounded-full object-cover mx-auto mt-3 border border-purple-300"
+            />
+          )}
+        </div>
+
+        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+        {success && (
+          <p className="text-green-600 text-sm text-center">{success}</p>
+        )}
         {redirecting && (
           <p className="text-sm text-blue-600 text-center">
             Redirecting to login...
@@ -128,15 +161,14 @@ export default function Register() {
         <button
           type="submit"
           disabled={loading || redirecting}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-2 rounded-full font-semibold hover:scale-105 transition-transform"
         >
-          {loading ? "Registering..." : "Register"}
+          {loading ? "Registering..." : "✨ Register"}
         </button>
 
-        {/* 🔗 Bottom links */}
-        <div className="flex justify-between text-sm text-blue-600 mt-2">
+        <div className="flex justify-between text-sm text-purple-600 mt-3">
           <Link to="/login" className="hover:underline">
-            Already have an account? Login
+            Already a user? Login
           </Link>
           <Link to="/forgot-password" className="hover:underline">
             Forgot Password?
