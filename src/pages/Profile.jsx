@@ -25,6 +25,9 @@ export default function Profile() {
         <p className="text-green-600 font-semibold">
           🎯 Credits: {user.credits ?? 0}
         </p>
+        <p className="text-xs text-gray-500 mt-1 text-center">
+          🎯 1 credit = 1 caption generation
+        </p>
 
         <button className="mt-4 px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full font-semibold hover:scale-105 transition-transform">
           ✏️ Edit Profile (coming soon)

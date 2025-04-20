@@ -1,3 +1,4 @@
+// Updated Navbar.jsx with credits badge display
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { account } from "../appwrite/appwriteConfig";
@@ -32,7 +33,6 @@ export default function Navbar() {
       if (!clickedInsideMenu && !clickedHamburger) {
         setMenuOpen(false);
       }
-
       if (!clickedInsideMobile && !clickedHamburger) {
         setMobileNavOpen(false);
       }
@@ -69,7 +69,7 @@ export default function Navbar() {
 
         {/* Desktop Nav Links */}
         {!isAuthPage && user && (
-          <div className="hidden md:flex gap-8 text-gray-700 font-medium">
+          <div className="hidden md:flex gap-6 items-center text-gray-700 font-medium">
             <Link
               to="/create"
               className={`hover:text-purple-600 ${
@@ -90,6 +90,9 @@ export default function Navbar() {
             >
               📁 Saved
             </Link>
+            <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+              🎯 {user?.credits ?? 0} Credits
+            </span>
           </div>
         )}
 
@@ -194,21 +197,21 @@ export default function Navbar() {
           <div className="flex gap-4 text-sm font-medium">
             <Link
               to="/login"
-              className={`$ {
+              className={
                 location.pathname === "/login"
                   ? "text-purple-600 font-semibold underline"
                   : "text-gray-700 hover:text-purple-600"
-              }`}
+              }
             >
               Login
             </Link>
             <Link
               to="/register"
-              className={`$ {
+              className={
                 location.pathname === "/register"
                   ? "text-purple-600 font-semibold underline"
                   : "text-gray-700 hover:text-purple-600"
-              }`}
+              }
             >
               Register
             </Link>
@@ -217,13 +220,11 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Nav Panel */}
-      {/* Mobile Nav Panel */}
       {mobileNavOpen && user && (
         <div
           ref={mobileRef}
           className="md:hidden mt-4 space-y-2 border-t pt-4 text-sm font-medium text-gray-700 transition-all duration-300 ease-in-out animate-fade-in"
         >
-          {/* Group 1: Primary Actions */}
           <Link
             to="/create"
             onClick={() => setMobileNavOpen(false)}
@@ -238,10 +239,7 @@ export default function Navbar() {
           >
             📁 Saved
           </Link>
-
           <hr className="my-2 border-t border-gray-200" />
-
-          {/* Group 2: Account Options */}
           <Link
             to="/profile"
             onClick={() => setMobileNavOpen(false)}
@@ -270,10 +268,10 @@ export default function Navbar() {
           >
             💸 Transactions
           </Link>
-
           <hr className="my-2 border-t border-gray-200" />
-
-          {/* Group 3: Logout */}
+          <div className="px-2 text-center text-green-700 text-xs font-semibold">
+            🎯 {user?.credits ?? 0} Credits
+          </div>
           <button
             onClick={handleLogout}
             className="block w-full text-left px-2 py-1 text-red-600 hover:bg-red-50"

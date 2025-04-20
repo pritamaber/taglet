@@ -163,6 +163,9 @@ export default function CreatePage() {
                 Clear
               </button>
             </div>
+            <p className="text-xs text-gray-500 text-center mt-2">
+              ⚠️ Each generation costs <strong>1 credit</strong>
+            </p>
           </div>
 
           {/* Preview Output */}

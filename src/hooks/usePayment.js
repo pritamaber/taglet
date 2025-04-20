@@ -16,8 +16,6 @@ export const usePayment = () => {
         false
       );
 
-      console.log("📦 Raw Appwrite execution:", execution);
-
       const body = execution?.responseBody;
 
       if (!body) {
@@ -28,7 +26,6 @@ export const usePayment = () => {
       let parsed = {};
       try {
         parsed = JSON.parse(body);
-        console.log("✅ Parsed response body:", parsed);
         return parsed;
       } catch (err) {
         console.error("❌ Failed to parse responseBody:", body);

@@ -1,86 +1,104 @@
 import { useAuth } from "../context/AuthContext";
-import { usePayment } from "../hooks/usePayment";
+import { usePlanPage } from "../hooks/usePlanPage";
+import { toast } from "react-hot-toast";
 
 export default function PlanPage() {
   const { user } = useAuth();
-  const { createOrder } = usePayment();
+  const { handleBuyCredits } = usePlanPage();
 
-  const handleBuyCredits = async ({ amount, credits }) => {
-    if (!user) {
-      alert("You must be logged in to buy credits.");
-      return;
-    }
-
-    const result = await createOrder({ amount, credits, userId: user.$id });
-    if (!result?.success || !result.order?.id) {
-      alert("❌ Failed to create Razorpay order.");
-      return;
-    }
-
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: result.order.amount,
-      currency: "INR",
-      name: "Taglet",
-      description: `Buy ${credits} credits`,
-      order_id: result.order.id,
-      prefill: { name: user.name, email: user.email },
-      theme: { color: "#9333ea" },
-      handler: async (response) => {
-        alert("✅ Payment successful.");
-      },
-    };
-
-    const razorpay = new window.Razorpay(options);
-    razorpay.open();
-  };
+  const plans = [
+    {
+      name: "Free Trial",
+      price: 0,
+      credits: 5,
+      description: "Try Taglet with limited credits. No payment required.",
+      recommended: false,
+    },
+    {
+      name: "Starter",
+      price: 19,
+      credits: 25,
+      description: "For light users — memes, reels, and quick posts.",
+      recommended: false,
+    },
+    {
+      name: "Pro",
+      price: 49,
+      credits: 100,
+      description: "Perfect for active creators and small brands.",
+      recommended: true,
+    },
+    {
+      name: "Power",
+      price: 119,
+      credits: 250,
+      description: "For daily creators, marketers, and meme lords.",
+      recommended: false,
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4 py-12 flex justify-center">
-      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg space-y-6">
-        <h1 className="text-3xl font-extrabold text-center text-purple-700">
-          💳 Your Plan
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 px-4 py-12">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-4xl font-bold text-center text-purple-700 mb-10">
+          💳 Choose Your Plan
         </h1>
 
-        <div className="text-center">
-          <p className="text-gray-600">Current Plan:</p>
-          <p className="text-xl font-bold text-purple-600">Free</p>
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {plans.map((plan) => (
+            <div
+              key={plan.name}
+              className={`p-6 bg-white rounded-2xl shadow-md border hover:shadow-lg transition duration-300 flex flex-col justify-between ${
+                plan.recommended ? "border-purple-500" : "border-gray-200"
+              }`}
+            >
+              <div>
+                <h2 className="text-xl font-semibold text-purple-700">
+                  {plan.name}
+                </h2>
+                <p className="mt-2 text-sm text-gray-600 mb-3">
+                  {plan.description}
+                </p>
+                <p className="text-3xl font-bold text-green-600">
+                  {plan.price === 0 ? "Free" : `₹${plan.price}`}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {plan.credits} Credits Included
+                </p>
+              </div>
 
-        <div className="text-center">
-          <p className="text-gray-600">Credits Remaining:</p>
-          <p className="text-lg text-green-600 font-semibold">
-            {user?.credits ?? 0}
+              <button
+                onClick={() =>
+                  handleBuyCredits({
+                    amount: plan.price,
+                    credits: plan.credits,
+                  })
+                }
+                disabled={plan.price === 0}
+                className={`mt-6 px-4 py-2 rounded-full text-white text-sm font-medium ${
+                  plan.price === 0
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-purple-600 hover:bg-purple-700"
+                }`}
+              >
+                {plan.price === 0 ? "Already Active" : "Buy Now"}
+              </button>
+            </div>
+          ))}
+          <p className="text-center text-xs text-gray-500 mt-4">
+            ⚡ <strong>1 credit = 1 caption generation</strong>
           </p>
         </div>
 
-        <hr />
-
-        <div>
-          <h2 className="text-lg font-bold mb-4 text-center text-purple-700">
-            Upgrade Your Credits
-          </h2>
-          <div className="grid gap-4">
-            <button
-              onClick={() => handleBuyCredits({ amount: 49, credits: 100 })}
-              className="bg-purple-100 hover:bg-purple-200 text-purple-800 font-semibold px-4 py-3 rounded-lg shadow-sm text-sm"
-            >
-              ₹49 – Get 100 Credits
-            </button>
-            <button
-              onClick={() => handleBuyCredits({ amount: 129, credits: 300 })}
-              className="bg-purple-200 hover:bg-purple-300 text-purple-900 font-semibold px-4 py-3 rounded-lg shadow-sm text-sm"
-            >
-              ₹129 – Get 300 Credits
-            </button>
-            <button
-              onClick={() => handleBuyCredits({ amount: 249, credits: 600 })}
-              className="bg-purple-300 hover:bg-purple-400 text-purple-900 font-semibold px-4 py-3 rounded-lg shadow-sm text-sm"
-            >
-              ₹249 – Get 600 Credits
-            </button>
-          </div>
-        </div>
+        <p className="text-center text-sm text-gray-600 mt-10">
+          Need more credits or want a custom plan?{" "}
+          <a
+            href="mailto:support@taglet.in"
+            className="text-purple-600 hover:underline"
+          >
+            Contact Support
+          </a>
+        </p>
       </div>
     </div>
   );
