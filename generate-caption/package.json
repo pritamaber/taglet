@@ -1,0 +1,8 @@
+{
+  "name": "caption-generator",
+  "type": "module",
+  "main": "main.js",
+  "dependencies": {
+    "openai": "^4.21.0"
+  }
+}
