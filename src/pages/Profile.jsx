@@ -1,4 +1,5 @@
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -28,6 +29,12 @@ export default function Profile() {
         <button className="mt-4 px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full font-semibold hover:scale-105 transition-transform">
           ✏️ Edit Profile (coming soon)
         </button>
+        <Link
+          to="/transactions"
+          className="block px-4 py-2 text-sm hover:bg-gray-100"
+        >
+          💳 Transactions
+        </Link>
       </div>
     </div>
   );

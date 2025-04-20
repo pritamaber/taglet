@@ -172,6 +172,12 @@ export default function Navbar() {
                 >
                   💳 Plan Info
                 </Link>
+                <Link
+                  to="/transactions"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  💳 Transactions
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
@@ -211,11 +217,13 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Nav Panel */}
+      {/* Mobile Nav Panel */}
       {mobileNavOpen && user && (
         <div
           ref={mobileRef}
           className="md:hidden mt-4 space-y-2 border-t pt-4 text-sm font-medium text-gray-700 transition-all duration-300 ease-in-out animate-fade-in"
         >
+          {/* Group 1: Primary Actions */}
           <Link
             to="/create"
             onClick={() => setMobileNavOpen(false)}
@@ -230,6 +238,10 @@ export default function Navbar() {
           >
             📁 Saved
           </Link>
+
+          <hr className="my-2 border-t border-gray-200" />
+
+          {/* Group 2: Account Options */}
           <Link
             to="/profile"
             onClick={() => setMobileNavOpen(false)}
@@ -251,6 +263,17 @@ export default function Navbar() {
           >
             💳 Plan Info
           </Link>
+          <Link
+            to="/transactions"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            💸 Transactions
+          </Link>
+
+          <hr className="my-2 border-t border-gray-200" />
+
+          {/* Group 3: Logout */}
           <button
             onClick={handleLogout}
             className="block w-full text-left px-2 py-1 text-red-600 hover:bg-red-50"

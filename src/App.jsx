@@ -21,6 +21,7 @@ import Settings from "./pages/Settings";
 import PlanPage from "./pages/PlanPage";
 import LandingPage from "./pages/LandingPage";
 import Feedback from "./pages/Feedback";
+import TransactionPage from "./pages/TransactionPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -107,6 +108,14 @@ function App() {
           element={
             <ProtectedRoute>
               <PlanPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <ProtectedRoute>
+              <TransactionPage />
             </ProtectedRoute>
           }
         />
