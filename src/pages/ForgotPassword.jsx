@@ -9,6 +9,10 @@ export default function ForgotPassword() {
         <p className="text-sm text-gray-600">
           Password reset functionality coming soon...
         </p>
+        <p className="text-sm text-gray-600">
+          mail <span className="text-purple-500">support@taglet.in</span> for
+          help
+        </p>
       </div>
     </div>
   );

@@ -6,10 +6,10 @@ import { useState } from "react";
 export default function Navbar() {
   const { user, setUser } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
 
@@ -20,23 +20,23 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow px-6 py-4 flex justify-between items-center">
-      {/* Logo */}
-      <Link to="/" className="ml-4 cursor-pointer">
-        <h1 className="text-3xl font-poppins font-semibold flex items-center space-x-1">
-          <span className="text-sky-400 hover:scale-110 transition-transform">
-            #{""}
-          </span>
-          <span className="text-purple-500 hover:text-purple-400 hover:tracking-wider transition-all">
-            taglet
-          </span>
-        </h1>
-      </Link>
+    <nav className="bg-white shadow px-6 py-4">
+      <div className="flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="ml-2 cursor-pointer">
+          <h1 className="text-3xl font-poppins font-semibold flex items-center space-x-1">
+            <span className="text-sky-400 hover:scale-110 transition-transform">
+              #
+            </span>
+            <span className="text-purple-500 hover:text-purple-400 hover:tracking-wider transition-all">
+              taglet
+            </span>
+          </h1>
+        </Link>
 
-      <div className="flex items-center gap-6">
-        {/* Navigation for logged-in users */}
+        {/* Desktop Nav Links - visible on md+ */}
         {!isAuthPage && user && (
-          <div className="flex gap-6 text-gray-700 font-medium">
+          <div className="hidden md:flex gap-8 text-gray-700 font-medium">
             <Link
               to="/create"
               className={`hover:text-purple-600 ${
@@ -45,7 +45,7 @@ export default function Navbar() {
                   : ""
               }`}
             >
-              Create
+              ✍️ Create
             </Link>
             <Link
               to="/saved"
@@ -55,14 +55,37 @@ export default function Navbar() {
                   : ""
               }`}
             >
-              Saved
+              📁 Saved
             </Link>
           </div>
         )}
 
-        {/* Dropdown for logged-in users */}
+        {/* Mobile Menu Icon */}
+        {user && (
+          <button
+            className="md:hidden text-gray-600 focus:outline-none"
+            onClick={() => setMobileNavOpen((prev) => !prev)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 6.75h15m-15 5.25h15m-15 5.25h15"
+              />
+            </svg>
+          </button>
+        )}
+
+        {/* User Avatar + Dropdown */}
         {!isAuthPage && user && (
-          <div className="relative">
+          <div className="relative ml-4 hidden md:block">
             <div
               onClick={() => setMenuOpen((prev) => !prev)}
               className="flex items-center cursor-pointer gap-2"
@@ -111,12 +134,12 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Login/Register for unauthenticated users */}
+        {/* Auth links */}
         {!user && !isAuthPage && (
           <div className="flex gap-4 text-sm font-medium">
             <Link
               to="/login"
-              className={`${
+              className={`$ {
                 location.pathname === "/login"
                   ? "text-purple-600 font-semibold underline"
                   : "text-gray-700 hover:text-purple-600"
@@ -126,7 +149,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/register"
-              className={`${
+              className={`$ {
                 location.pathname === "/register"
                   ? "text-purple-600 font-semibold underline"
                   : "text-gray-700 hover:text-purple-600"
@@ -137,6 +160,53 @@ export default function Navbar() {
           </div>
         )}
       </div>
+
+      {/* Mobile Nav Panel */}
+      {mobileNavOpen && user && (
+        <div className="md:hidden mt-4 space-y-2 border-t pt-4 text-sm font-medium text-gray-700">
+          <Link
+            to="/create"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            ✍️ Create
+          </Link>
+          <Link
+            to="/saved"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            📁 Saved
+          </Link>
+          <Link
+            to="/profile"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            👤 Profile
+          </Link>
+          <Link
+            to="/settings"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            ⚙️ Settings
+          </Link>
+          <Link
+            to="/plan"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            💳 Plan Info
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="block w-full text-left px-2 py-1 text-red-600 hover:bg-red-50"
+          >
+            🚪 Logout
+          </button>
+        </div>
+      )}
     </nav>
   );
 }

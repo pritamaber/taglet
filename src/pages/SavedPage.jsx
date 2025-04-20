@@ -10,6 +10,8 @@ export default function SavedPage() {
   const [loading, setLoading] = useState(true);
   const [filterMood, setFilterMood] = useState("");
   const [filterStyle, setFilterStyle] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
+  const [showReelsOnly, setShowReelsOnly] = useState(false);
 
   useEffect(() => {
     const loadSaved = async () => {
@@ -33,14 +35,25 @@ export default function SavedPage() {
     }
   };
 
-  const filteredPosts = posts.filter((post) => {
-    return (
-      (!filterMood || post.mood === filterMood) &&
-      (!filterStyle || post.style === filterStyle)
-    );
-  });
+  const filteredPosts = posts
+    .filter((post) => {
+      return (
+        (!filterMood || post.mood === filterMood) &&
+        (!filterStyle || post.style === filterStyle) &&
+        (!showReelsOnly || post.isReel === true)
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === "newest")
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sortBy === "oldest")
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      if (sortBy === "mood") return (a.mood || "").localeCompare(b.mood || "");
+      if (sortBy === "style")
+        return (a.style || "").localeCompare(b.style || "");
+      return 0;
+    });
 
-  // Emoji-enhanced options for filters
   const moodOptions = [
     { label: "😆 Funny", value: "funny" },
     { label: "💡 Inspirational", value: "inspirational" },
@@ -109,17 +122,39 @@ export default function SavedPage() {
           ))}
         </select>
 
-        {(filterMood || filterStyle) && (
+        <label className="flex items-center gap-2 text-sm text-purple-700">
+          <input
+            type="checkbox"
+            checked={showReelsOnly}
+            onChange={() => setShowReelsOnly(!showReelsOnly)}
+            className="h-4 w-4 text-purple-600 border-gray-300 rounded"
+          />
+          🎞️ Show Reels Only
+        </label>
+
+        {(filterMood || filterStyle || showReelsOnly) && (
           <button
             onClick={() => {
               setFilterMood("");
               setFilterStyle("");
+              setShowReelsOnly(false);
             }}
             className="text-sm text-purple-700 bg-purple-100 px-4 py-2 rounded-md hover:bg-purple-200 transition"
           >
             🔄 All Posts
           </button>
         )}
+
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="border border-purple-300 bg-white text-sm px-4 py-2 rounded-md shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+        >
+          <option value="newest">🕒 Newest First</option>
+          <option value="oldest">⏳ Oldest First</option>
+          <option value="mood">🎭 Sort by Mood</option>
+          <option value="style">🧢 Sort by Style</option>
+        </select>
       </div>
 
       {loading ? (
