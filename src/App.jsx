@@ -25,9 +25,9 @@ import TransactionPage from "./pages/TransactionPage";
 import RefundPage from "./pages/RefundPage";
 import SupportPage from "./pages/SupportPage";
 import TermsPage from "./pages/TermsPage";
+import Layout from "./pages/Layout";
 
 // Components
-import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Auth context
@@ -50,111 +50,106 @@ function App() {
     <Router>
       <Toaster position="top-center" reverseOrder={false} />
       <ScrollToTop />
-      <Navbar />
 
       <Routes>
-        {/* 🚀 Landing Page by default if not logged in */}
-        <Route
-          path="/"
-          element={user ? <Navigate to="/create" /> : <LandingPage />}
-        />
+        {/* Global Layout Wrapper */}
+        <Route element={<Layout />}>
+          <Route
+            path="/"
+            element={user ? <Navigate to="/create" replace /> : <LandingPage />}
+          />
 
-        {/* {Feedbackroute} */}
-        <Route path="/feedback" element={<Feedback />} />
+          {/* Auth Pages */}
+          <Route
+            path="/login"
+            element={!user ? <Login /> : <Navigate to="/create" replace />}
+          />
+          <Route
+            path="/register"
+            element={!user ? <Register /> : <Navigate to="/create" replace />}
+          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Auth Pages */}
-        <Route
-          path="/login"
-          element={!user ? <Login /> : <Navigate to="/create" replace />}
-        />
-        <Route
-          path="/register"
-          element={!user ? <Register /> : <Navigate to="/create" replace />}
-        />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+          {/* Public Pages */}
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/terms" element={<TermsPage />} />
 
-        {/* Protected Pages */}
-        <Route
-          path="/create"
-          element={
-            <ProtectedRoute>
-              <CreatePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/saved"
-          element={
-            <ProtectedRoute>
-              <SavedPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <Settings />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/plan"
-          element={
-            <ProtectedRoute>
-              <PlanPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/transactions"
-          element={
-            <ProtectedRoute>
-              <TransactionPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/refunds"
-          element={
-            <ProtectedRoute>
-              <RefundPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/support"
-          element={
-            <ProtectedRoute>
-              <SupportPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/terms"
-          element={
-            <ProtectedRoute>
-              <TermsPage />
-            </ProtectedRoute>
-          }
-        />
-        {/* Fallback 404 */}
-        <Route
-          path="*"
-          element={
-            <div className="p-10 text-center text-red-500">
-              🚫 404 - Page not found
-            </div>
-          }
-        />
+          {/* Protected Pages */}
+          <Route
+            path="/create"
+            element={
+              <ProtectedRoute>
+                <CreatePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/saved"
+            element={
+              <ProtectedRoute>
+                <SavedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/plan"
+            element={
+              <ProtectedRoute>
+                <PlanPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <TransactionPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/refunds"
+            element={
+              <ProtectedRoute>
+                <RefundPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/support"
+            element={
+              <ProtectedRoute>
+                <SupportPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 404 Fallback */}
+          <Route
+            path="*"
+            element={
+              <div className="p-10 text-center text-red-500">
+                🚫 404 - Page not found
+              </div>
+            }
+          />
+        </Route>
       </Routes>
     </Router>
   );

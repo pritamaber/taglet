@@ -85,8 +85,8 @@ export default function PlanPage() {
               </button>
               <p className="text-xs text-gray-400 mt-2 text-center">
                 Refunds are not guaranteed. See our{" "}
-                <Link to="/refunds" className="underline text-purple-500">
-                  refund policy
+                <Link to="/terms" className="underline text-purple-500">
+                  Terms and Conditions
                 </Link>
               </p>
             </div>
