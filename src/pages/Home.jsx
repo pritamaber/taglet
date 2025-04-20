@@ -4,15 +4,15 @@ import { motion } from "framer-motion";
 export default function Home() {
   const samples = [
     {
-      url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+      url: "https://fastly.picsum.photos/id/206/2880/1800.jpg?hmac=qqtAE4icI-2Tkxgul5jrduIkZu3JtmvLqpOIwLhzYZA",
       caption: "Chasing sunsets 🌅",
     },
     {
-      url: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80",
+      url: "https://fastly.picsum.photos/id/64/4326/2884.jpg?hmac=9_SzX666YRpR_fOyYStXpfSiJ_edO3ghlSRnH2w09Kg",
       caption: "Feeling fabulous ✨",
     },
     {
-      url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+      url: "https://fastly.picsum.photos/id/342/2896/1944.jpg?hmac=_2cYDHi2iG1XY53gvXOrhrEWIP5R5OJlP7ySYYCA0QA",
       caption: "Colors of life 🎨",
     },
   ];
