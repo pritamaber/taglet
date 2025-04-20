@@ -21,6 +21,8 @@ export default function CreatePage() {
     handleGenerateCaptions,
     clearImage,
     copyAll,
+    isReel,
+    setIsReel,
   } = useCreatePage(fileInputRef);
 
   const { savePost } = useSaved();
@@ -47,9 +49,46 @@ export default function CreatePage() {
     }
   };
 
+  // Mood and style dropdown options with emojis
+  const moodOptions = [
+    { label: "😆 Funny", value: "funny" },
+    { label: "💡 Inspirational", value: "inspirational" },
+    { label: "🎨 Aesthetic", value: "aesthetic" },
+    { label: "💖 Romantic", value: "romantic" },
+    { label: "🔥 Motivational", value: "motivational" },
+    { label: "💥 Bold", value: "bold" },
+    { label: "📈 Trendy", value: "trendy" },
+    { label: "🐾 Cute", value: "cute" },
+    { label: "💅 Sassy", value: "sassy" },
+    { label: "🕰️ Nostalgic", value: "nostalgic" },
+    { label: "⚡ Edgy", value: "edgy" },
+    { label: "🧘 Calm", value: "calm" },
+    { label: "🕵️ Mysterious", value: "mysterious" },
+    { label: "🎉 Celebratory", value: "celebratory" },
+    { label: "😢 Emotional", value: "emotional" },
+  ];
+
+  const styleOptions = [
+    { label: "😆 Witty", value: "witty" },
+    { label: "💎 Elegant", value: "elegant" },
+    { label: "🌿 Minimal", value: "minimal" },
+    { label: "🧼 Clean", value: "clean" },
+    { label: "🧠 Professional", value: "professional" },
+    { label: "👑 Luxury", value: "luxury" },
+    { label: "📸 Vintage", value: "vintage" },
+    { label: "🎲 Playful", value: "playful" },
+    { label: "🙃 Sarcastic", value: "sarcastic" },
+    { label: "🖤 Dark", value: "dark" },
+    { label: "🧃 Youthful", value: "youthful" },
+    { label: "🎭 Artsy", value: "artsy" },
+    { label: "📈 Trendy", value: "trendy" },
+    { label: "💬 Relatable", value: "relatable" },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4 py-12 flex justify-center">
       <div className="w-full max-w-6xl space-y-10">
+        {/* Page Header */}
         <header className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-extrabold text-purple-700">
@@ -70,7 +109,9 @@ export default function CreatePage() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Upload + Options */}
           <div className="bg-white p-6 rounded-xl shadow border space-y-4">
+            {/* Upload */}
             <label className="block text-sm font-medium text-gray-700">
               Upload an image
             </label>
@@ -82,36 +123,46 @@ export default function CreatePage() {
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
             />
 
+            {/* Reel Mode Toggle */}
+            <label className="flex items-center gap-2 text-sm font-medium text-purple-700">
+              <input
+                type="checkbox"
+                checked={isReel}
+                onChange={() => setIsReel(!isReel)}
+                className="h-4 w-4 text-purple-600 border-gray-300 rounded"
+              />
+              Treat this as a Reel
+            </label>
+
+            {/* Mood Dropdown */}
             <select
               value={mood}
               onChange={(e) => setMood(e.target.value)}
               className="w-full border border-purple-200 rounded-md py-2 px-3 text-sm shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
             >
               <option value="">🎭 Select a mood</option>
-              <option value="funny">😆 Funny</option>
-              <option value="inspirational">💡 Inspirational</option>
-              <option value="aesthetic">🎨 Aesthetic</option>
-              <option value="romantic">💖 Romantic</option>
-              <option value="motivational">🔥 Motivational</option>
-              <option value="bold">💥 Bold</option>
-              <option value="trendy">📈 Trendy</option>
-              <option value="cute">🐾 Cute</option>
+              {moodOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
 
+            {/* Style Dropdown */}
             <select
               value={style}
               onChange={(e) => setStyle(e.target.value)}
               className="w-full border border-purple-200 rounded-md py-2 px-3 text-sm shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
             >
               <option value="">🧢 Select a style</option>
-              <option value="witty">😆 Witty</option>
-              <option value="elegant">💎 Elegant</option>
-              <option value="minimal">🌿 Minimal</option>
-              <option value="clean">🧼 Clean</option>
-              <option value="professional">🧠 Professional</option>
-              <option value="luxury">👑 Luxury</option>
+              {styleOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
 
+            {/* Optional Custom Message */}
             <input
               type="text"
               value={customMessage}
@@ -120,6 +171,7 @@ export default function CreatePage() {
               className="w-full border border-purple-200 rounded-md py-2 px-3 text-sm shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
             />
 
+            {/* Generate + Clear Buttons */}
             <div className="flex gap-3 pt-3">
               <button
                 onClick={handleGenerateCaptions}
@@ -137,6 +189,7 @@ export default function CreatePage() {
             </div>
           </div>
 
+          {/* Preview Output */}
           {image && (
             <div className="bg-white p-6 rounded-xl shadow border relative">
               <img
@@ -155,7 +208,7 @@ export default function CreatePage() {
                   {caption && (
                     <div className="mt-4">
                       <h3 className="text-lg font-semibold text-purple-700">
-                        📝 Caption
+                        📝 {isReel ? "Reel Caption" : "Caption"}
                       </h3>
                       <p className="italic text-gray-800 mt-1 whitespace-pre-wrap">
                         {caption}

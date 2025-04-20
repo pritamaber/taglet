@@ -8,7 +8,10 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+
 generate-caption
+create-order
+
 dist
 dist-ssr
 *.local
