@@ -5,7 +5,8 @@ import { useAdminDashboard } from "../hooks/useAdminDashboard";
 export default function AdminDashboard() {
   const { user } = useAuth();
   const isAdmin = user?.email === "pritam.aber@gmail.com";
-  const { refunds, feedback, support, loading } = useAdminDashboard(isAdmin);
+  const { refunds, feedback, support, loading, updateRefundStatus } =
+    useAdminDashboard(isAdmin);
   const [activeTab, setActiveTab] = useState("refunds");
 
   if (!isAdmin) {
@@ -35,6 +36,19 @@ export default function AdminDashboard() {
             >
               {r.status ?? "pending"}
             </span>
+            <button
+              onClick={() => updateRefundStatus(r.$id, "approved")}
+              className="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 rounded-full mr-2 ml-2"
+            >
+              ✅ Approve
+            </button>
+
+            <button
+              onClick={() => updateRefundStatus(r.$id, "rejected")}
+              className="bg-orange-500 hover:bg-orange-600 text-white text-xs px-3 py-1 rounded-full"
+            >
+              ❌ Reject
+            </button>
           </div>
         ));
 

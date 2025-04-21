@@ -42,6 +42,23 @@ export const useAdminDashboard = (isAdmin) => {
 
     fetchAll();
   }, [isAdmin]);
+  const updateRefundStatus = async (id, status) => {
+    try {
+      await databases.updateDocument(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        import.meta.env.VITE_APPWRITE_COLLECTION_ID_REFUNDS,
+        id,
+        { status }
+      );
 
-  return { refunds, feedback, support, loading };
+      // Optionally refetch or locally update state
+      setRefunds((prev) =>
+        prev.map((r) => (r.$id === id ? { ...r, status } : r))
+      );
+    } catch (err) {
+      console.error("Failed to update refund status:", err.message);
+    }
+  };
+
+  return { refunds, feedback, support, loading, updateRefundStatus };
 };
