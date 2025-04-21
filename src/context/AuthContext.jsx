@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     try {
       // ✅ First try getting session user
       const sessionUser = await account.get();
+      // user = await account.get();
 
       // ✅ Now fetch custom profile by email
       const result = await databases.listDocuments(

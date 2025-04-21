@@ -1,7 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { usePayment } from "./usePayment";
 import { toast } from "react-hot-toast";
-import { functions } from "../appwrite/appwriteConfig";
 
 /**
  * Handles credit plan purchases via Razorpay.
@@ -42,17 +41,34 @@ export const usePlanPage = () => {
           amount,
           razorpayId: response.razorpay_payment_id,
         };
-
         console.log("📤 Payload to apply-credits function:", payload);
 
         try {
-          const execution = await functions.createExecution(
-            import.meta.env.VITE_APPWRITE_FUNCTION_ID_APPLY_CREDITS,
-            JSON.stringify(payload)
+          const res = await fetch(
+            `${import.meta.env.VITE_APPWRITE_ENDPOINT}/functions/${
+              import.meta.env.VITE_APPWRITE_FUNCTION_ID_APPLY_CREDITS
+            }/executions`,
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                "X-Appwrite-Project": import.meta.env.VITE_APPWRITE_PROJECT_ID,
+                "X-Appwrite-Key": import.meta.env.VITE_APPWRITE_API_KEY,
+              },
+              body: JSON.stringify({
+                data: payload, // 🔥 wrap payload in "data" key (Appwrite's REST format)
+              }),
+            }
           );
 
-          console.log("✅ Function executed:", execution);
-          toast.success("✅ Credits applied to your account!");
+          const data = await res.json();
+          console.log("✅ Cloud function response:", data);
+
+          if (data?.success) {
+            toast.success("✅ Credits applied to your account!");
+          } else {
+            toast.error("❌ Credits not applied. Please contact support.");
+          }
         } catch (err) {
           console.error("❌ Failed to apply credits:", err.message);
           toast.error("Failed to update credits. Please contact support.");

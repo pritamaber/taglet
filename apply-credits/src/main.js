@@ -13,7 +13,8 @@ export default async ({ req, res, log }) => {
   try {
     log("📦 RAW req.payload:", req.payload);
 
-    const { userId, credits, amount, razorpayId } = JSON.parse(req.payload);
+    const { userId, credits, amount, razorpayId } = req.body.data;
+
     log("🧠 Payload:", { userId, credits, amount, razorpayId });
 
     if (!userId || !credits || !amount || !razorpayId) {
