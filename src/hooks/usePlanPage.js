@@ -32,7 +32,7 @@ export const usePlanPage = () => {
       order_id: result.order.id,
       prefill: { name: user.name, email: user.email },
       theme: { color: "#9333ea" },
-      handler: async () => {
+      handler: async (response) => {
         toast.success("🎉 Payment successful!");
         console.log("💳 Razorpay response:", response); // should include .razorpay_payment_id
 
