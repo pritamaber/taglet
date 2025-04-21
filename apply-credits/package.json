@@ -1,0 +1,13 @@
+{
+  "name": "apply-credits",
+  "version": "1.0.0",
+  "description": "Appwrite Cloud Function to apply credits after successful Razorpay payment",
+  "main": "src/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^10.0.0"
+  }
+}

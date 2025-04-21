@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { usePayment } from "./usePayment";
 import { toast } from "react-hot-toast";
+import { functions } from "../appwrite/appwriteConfig";
 
 /**
  * Handles credit plan purchases via Razorpay.
@@ -33,7 +34,25 @@ export const usePlanPage = () => {
       theme: { color: "#9333ea" },
       handler: async () => {
         toast.success("🎉 Payment successful!");
-        // Optional: refresh user credits here
+        console.log("💳 Razorpay response:", response); // should include .razorpay_payment_id
+
+        // Apply credits to user after payment
+        try {
+          await functions.createExecution(
+            import.meta.env.VITE_APPWRITE_FUNCTION_ID_APPLY_CREDITS,
+            JSON.stringify({
+              userId: user.$id,
+              credits,
+              amount,
+              razorpayId: response.razorpay_payment_id, // ✅ THIS must come from param
+            })
+          );
+
+          toast.success("✅ Credits applied to your account!");
+        } catch (err) {
+          console.error("❌ Failed to apply credits:", err.message);
+          toast.error("Failed to update credits. Please contact support.");
+        }
       },
     };
 

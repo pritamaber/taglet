@@ -91,10 +91,10 @@ export default function PlanPage() {
               </p>
             </div>
           ))}
-          <p className="text-center text-xs text-gray-500 mt-4">
-            ⚡ <strong>1 credit = 1 caption generation</strong>
-          </p>
         </div>
+        <p className="text-center text-xs text-gray-500 mt-4">
+          ⚡ <strong>1 credit = 1 caption generation</strong>
+        </p>
 
         <p className="text-center text-sm text-gray-600 mt-10">
           Need more credits or want a custom plan?{" "}
