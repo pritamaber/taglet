@@ -26,6 +26,7 @@ import RefundPage from "./pages/RefundPage";
 import SupportPage from "./pages/SupportPage";
 import TermsPage from "./pages/TermsPage";
 import Layout from "./pages/Layout";
+import AdminDashboard from "./pages/AdminDashboard";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -136,6 +137,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <SupportPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />

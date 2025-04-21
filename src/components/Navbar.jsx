@@ -181,6 +181,14 @@ export default function Navbar() {
                 >
                   💳 Transactions
                 </Link>
+                {user.email === "pritam.aber@gmail.com" && (
+                  <Link
+                    to="/admin"
+                    className="block px-4 py-2 text-sm text-purple-700 hover:bg-gray-100"
+                  >
+                    🛠 Admin Dashboard
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
@@ -272,6 +280,15 @@ export default function Navbar() {
           <div className="px-2 text-center text-green-700 text-xs font-semibold">
             🎯 {user?.credits ?? 0} Credits
           </div>
+          <hr className="my-2 border-t border-gray-200" />
+          {user.email === "pritam.aber@gmail.com" && (
+            <Link
+              to="/admin"
+              className="block px-4 py-2 text-sm text-purple-700 hover:bg-gray-100"
+            >
+              🛠 Admin Dashboard
+            </Link>
+          )}
           <button
             onClick={handleLogout}
             className="block w-full text-left px-2 py-1 text-red-600 hover:bg-red-50"
