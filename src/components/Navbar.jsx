@@ -90,8 +90,18 @@ export default function Navbar() {
             >
               📁 Saved
             </Link>
+            <Link
+              to="/plan"
+              className={`hover:text-purple-600 ${
+                location.pathname === "/plan"
+                  ? "text-purple-600 font-semibold"
+                  : ""
+              }`}
+            >
+              💳 Buy Credits
+            </Link>
             <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-              🎯 {user?.credits ?? 0} Credits
+              🎯 {user?.credits ?? 0} Credits left
             </span>
           </div>
         )}

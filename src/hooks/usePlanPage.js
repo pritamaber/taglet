@@ -32,22 +32,26 @@ export const usePlanPage = () => {
       order_id: result.order.id,
       prefill: { name: user.name, email: user.email },
       theme: { color: "#9333ea" },
+
       handler: async (response) => {
         toast.success("🎉 Payment successful!");
-        console.log("💳 Razorpay response:", response); // should include .razorpay_payment_id
 
-        // Apply credits to user after payment
+        const payload = {
+          userId: user.$id,
+          credits,
+          amount,
+          razorpayId: response.razorpay_payment_id,
+        };
+
+        console.log("📤 Payload to apply-credits function:", payload);
+
         try {
-          await functions.createExecution(
+          const execution = await functions.createExecution(
             import.meta.env.VITE_APPWRITE_FUNCTION_ID_APPLY_CREDITS,
-            JSON.stringify({
-              userId: user.$id,
-              credits,
-              amount,
-              razorpayId: response.razorpay_payment_id, // ✅ THIS must come from param
-            })
+            JSON.stringify(payload)
           );
 
+          console.log("✅ Function executed:", execution);
           toast.success("✅ Credits applied to your account!");
         } catch (err) {
           console.error("❌ Failed to apply credits:", err.message);
