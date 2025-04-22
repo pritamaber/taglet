@@ -17,17 +17,17 @@ export const useAdminDashboard = (isAdmin) => {
           databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DATABASE_ID,
             import.meta.env.VITE_APPWRITE_COLLECTION_ID_REFUNDS,
-            [Query.orderDesc("createdAt")]
+            [Query.orderDesc("$createdAt")]
           ),
           databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DATABASE_ID,
             import.meta.env.VITE_APPWRITE_COLLECTION_ID_FEEDBACK,
-            [Query.orderDesc("createdAt")]
+            [Query.orderDesc("$createdAt")]
           ),
           databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DATABASE_ID,
             import.meta.env.VITE_APPWRITE_COLLECTION_ID_SUPPORT,
-            [Query.orderDesc("createdAt")]
+            [Query.orderDesc("$createdAt")]
           ),
         ]);
         setRefunds(r.documents);
