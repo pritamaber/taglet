@@ -11,11 +11,11 @@ export default function useGoogleAuth() {
 
   const loginWithGoogle = async () => {
     try {
-      // Redirects to Google login page
+      // Redirect to Google login
       await account.createOAuth2Session(
         "google",
-        `${window.location.origin}/auth-callback`, // Success redirect
-        `${window.location.origin}/login` // Failure redirect
+        `${window.location.origin}/auth-callback`, // Success
+        `${window.location.origin}/login` // Failure
       );
     } catch (err) {
       console.error("Google OAuth error:", err);
@@ -23,21 +23,24 @@ export default function useGoogleAuth() {
     }
   };
 
-  // Called on /auth-callback route after OAuth login
   const handleOAuthRedirect = async () => {
     try {
       const sessionUser = await account.get();
 
-      // Check if user already exists in DB
-      const res = await databases.listDocuments(
+      // Step 1: Check if user already exists
+      const existingUsers = await databases.listDocuments(
         import.meta.env.VITE_APPWRITE_DATABASE_ID,
         import.meta.env.VITE_APPWRITE_COLLECTION_ID_USERS,
         [Query.equal("email", sessionUser.email)]
       );
 
-      if (res.documents.length === 0) {
-        // ✅ First-time user → create user doc
-        await databases.createDocument(
+      let userDoc;
+
+      if (existingUsers.documents.length > 0) {
+        userDoc = existingUsers.documents[0]; // ✅ Use first match
+      } else {
+        // Step 2: Create new user document
+        const created = await databases.createDocument(
           import.meta.env.VITE_APPWRITE_DATABASE_ID,
           import.meta.env.VITE_APPWRITE_COLLECTION_ID_USERS,
           ID.unique(),
@@ -53,10 +56,12 @@ export default function useGoogleAuth() {
             hasClaimedFreeTrial: true,
           }
         );
+
+        userDoc = created;
       }
 
-      // ✅ Set user context
-      setUser(res.documents[0] || sessionUser);
+      // ✅ Set user in context
+      setUser(userDoc);
       toast.success("Logged in successfully with Google");
       navigate("/create");
     } catch (err) {

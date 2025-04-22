@@ -48,10 +48,18 @@ export default function PlanPage() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`p-6 bg-white rounded-2xl shadow-md border hover:shadow-lg transition duration-300 flex flex-col justify-between ${
-                plan.recommended ? "border-purple-500" : "border-gray-200"
+              className={`relative p-6 bg-white rounded-2xl shadow-md border hover:shadow-lg transition duration-300 flex flex-col justify-between ${
+                plan.recommended
+                  ? "border-purple-500 shadow-lg"
+                  : "border-gray-200"
               }`}
             >
+              {plan.recommended && (
+                <div className="absolute top-2 right-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs px-2 py-1 rounded-full shadow font-semibold">
+                  ⭐ Recommended
+                </div>
+              )}
+
               <div>
                 <h2 className="text-xl font-semibold text-purple-700">
                   {plan.name}

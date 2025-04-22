@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { describeImage } from "../ai/describeImage";
 import imageCompression from "browser-image-compression";
-import { storage, ID } from "../appwrite/appwriteConfig";
+import { storage, ID, databases } from "../appwrite/appwriteConfig";
 import { useSaved } from "../hooks/useSaved.jsx";
 import { useAuth } from "../context/AuthContext";
 /**
@@ -29,7 +29,7 @@ export default function useCreatePage(fileInputRef) {
   // === Import variable to facilate save post ===
 
   const { savePost } = useSaved();
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
 
   /**
    * Handle file input from user
@@ -93,8 +93,14 @@ export default function useCreatePage(fileInputRef) {
   /**
    * Call the backend AI function to generate captions and hashtags
    */
+
   const handleGenerateCaptions = async () => {
     if (!file) return alert("Please upload an image first.");
+    if (!user || user.credits <= 0) {
+      toast.error("You don’t have enough credits. Please upgrade your plan.");
+      return;
+    }
+
     setLoading(true);
     setDisplayedCaption("");
 
@@ -116,9 +122,27 @@ export default function useCreatePage(fileInputRef) {
         index++;
         if (index >= result.caption.length) clearInterval(interval);
       }, 25);
+
+      // ✅ Deduct 1 credit after successful generation
+      const updatedCredits = (user.credits || 0) - 1;
+
+      await databases.updateDocument(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        import.meta.env.VITE_APPWRITE_COLLECTION_ID_USERS,
+        user.$id,
+        { credits: updatedCredits }
+      );
+
+      const updatedUser = await databases.getDocument(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        import.meta.env.VITE_APPWRITE_COLLECTION_ID_USERS,
+        user.$id
+      );
+
+      setUser(updatedUser); // 🔄 update context for navbar
     } catch (err) {
       console.error("❌ Caption generation failed:", err);
-      alert("Failed to generate caption. Please try again.");
+      toast.error("Failed to generate caption. Please try again.");
     } finally {
       setLoading(false);
     }
