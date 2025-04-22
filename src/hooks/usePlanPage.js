@@ -4,7 +4,7 @@ import { databases, ID } from "../appwrite/appwriteConfig";
 import { toast } from "react-hot-toast";
 
 export const usePlanPage = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth(); // ✅ Include setUser
   const { createOrder } = usePayment();
 
   const handleBuyCredits = async ({ amount, credits }) => {
@@ -43,6 +43,14 @@ export const usePlanPage = () => {
               user.$id,
               { credits: newCreditBalance }
             );
+
+            // 2️⃣.5 ✅ Fetch updated user and update context to reflect changes instantly
+            const updatedUserDoc = await databases.getDocument(
+              import.meta.env.VITE_APPWRITE_DATABASE_ID,
+              import.meta.env.VITE_APPWRITE_COLLECTION_ID_USERS,
+              user.$id
+            );
+            setUser(updatedUserDoc); // 👈 Live navbar update!
 
             // 3️⃣ Create transaction record
             await databases.createDocument(

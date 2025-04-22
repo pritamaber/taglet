@@ -1,0 +1,36 @@
+git checkout main
+
+git checkout -b feature/use-transactions-real-db
+
+git add .
+git commit -m "🔄 Hook: useTransactions now fetches real data from Appwrite"
+
+
+
+
+
+
+(optional delete branch)
+git branch -d feature/use-transactions-real-db
+
+
+
+
+
+
+
+git log --oneline
+
+git reset --hard <commit_hash>
+
+git reset --hard a1b2c3d
+
+
+
+
+
+
+
+(remote)
+git remote add origin https://github.com/yourusername/yourrepo.git
+git push -u origin main
