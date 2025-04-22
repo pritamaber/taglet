@@ -200,6 +200,68 @@ export default function LandingPage() {
           audience and aesthetic. Built to make your posts pop.
         </p>
       </section>
+      {/* Features Section */}
+      <section className="bg-purple-50 py-20 px-6 relative z-10">
+        <motion.h3
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="text-2xl md:text-3xl font-bold text-purple-700 text-center mb-12"
+        >
+          Why You'll Love Taglet 💜
+        </motion.h3>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {[
+            {
+              icon: "🧠",
+              title: "AI-Powered Captions",
+              desc: "Smart and trendy captions tailored to your image mood, powered by OpenAI.",
+            },
+            {
+              icon: "🏷️",
+              title: "20+ Viral Hashtags",
+              desc: "Boost your reach with automatically generated hashtag sets.",
+            },
+            {
+              icon: "⚡",
+              title: "Fast & Effortless",
+              desc: "Generate captions in seconds — save time and post confidently.",
+            },
+            {
+              icon: "📸",
+              title: "Image-Driven Magic",
+              desc: "Just upload your image — we’ll do the rest. No typing needed.",
+            },
+            {
+              icon: "📈",
+              title: "Engagement Booster",
+              desc: "Higher-quality content means better reactions, shares, and followers.",
+            },
+            {
+              icon: "🛠️",
+              title: "Made for Creators",
+              desc: "From influencers to brands, Taglet fits any content workflow.",
+            },
+          ].map((feature, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className="bg-white p-6 rounded-xl shadow border hover:shadow-md transition"
+            >
+              <div className="text-3xl mb-3">{feature.icon}</div>
+              <h4 className="text-lg font-semibold text-purple-700 mb-2">
+                {feature.title}
+              </h4>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {feature.desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="text-center text-sm text-gray-600 py-10 px-4 bg-white border-t relative z-10">
