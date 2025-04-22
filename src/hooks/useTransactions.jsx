@@ -1,33 +1,36 @@
 import { useAuth } from "../context/AuthContext";
+import { databases, Query } from "../appwrite/appwriteConfig";
 
 export const useTransactions = () => {
   const { user } = useAuth();
 
   /**
-   * Fetch transaction history for the current user
-   * Currently returns dummy data for testing
+   * Fetch transaction history from Appwrite DB for current user
+   * @returns {Promise<Array>} Array of transactions
    */
   const getTransactions = async () => {
-    if (!user) return [];
+    if (!user) {
+      console.error("No authenticated user found.");
+      return [];
+    }
 
-    // Simulated delay
-    await new Promise((res) => setTimeout(res, 500));
+    try {
+      const response = await databases.listDocuments(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        import.meta.env.VITE_APPWRITE_COLLECTION_ID_TRANSACTIONS,
+        [Query.equal("userId", user.$id), Query.orderDesc("timestamp")]
+      );
 
-    // Return dummy transactions
-    return [
-      {
-        razorpayId: "pay_001ABCXYZ",
-        amount: 49,
-        credits: 100,
-        timestamp: new Date().toISOString(),
-      },
-      {
-        razorpayId: "pay_002XYZABC",
-        amount: 99,
-        credits: 250,
-        timestamp: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-      },
-    ];
+      return response.documents.map((doc) => ({
+        razorpayId: doc.razorpayId,
+        amount: doc.amount,
+        credits: doc.credits,
+        timestamp: doc.timestamp,
+      }));
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      return [];
+    }
   };
 
   return { getTransactions };
