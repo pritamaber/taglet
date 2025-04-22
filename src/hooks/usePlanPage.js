@@ -1,83 +1,83 @@
 import { useAuth } from "../context/AuthContext";
 import { usePayment } from "./usePayment";
+import { databases, ID } from "../appwrite/appwriteConfig";
 import { toast } from "react-hot-toast";
 
-/**
- * Handles credit plan purchases via Razorpay.
- */
 export const usePlanPage = () => {
   const { user } = useAuth();
   const { createOrder } = usePayment();
 
   const handleBuyCredits = async ({ amount, credits }) => {
     if (!user) {
-      toast.error("You must be logged in to buy credits.");
+      toast.error("Please login to continue");
       return;
     }
 
-    const result = await createOrder({ amount, credits, userId: user.$id });
+    try {
+      const order = await createOrder({ amount, credits, userId: user.$id });
+      if (!order?.success) throw new Error("Failed to create payment order");
 
-    if (!result?.success || !result.order?.id) {
-      toast.error("❌ Failed to create Razorpay order.");
-      return;
-    }
+      const razorpay = new window.Razorpay({
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.order.amount,
+        currency: "INR",
+        name: "Taglet",
+        description: `Purchase of ${credits} credits`,
+        order_id: order.order.id,
+        handler: async (response) => {
+          try {
+            // 1️⃣ Fetch current user credits
+            const userDoc = await databases.getDocument(
+              import.meta.env.VITE_APPWRITE_DATABASE_ID,
+              import.meta.env.VITE_APPWRITE_COLLECTION_ID_USERS,
+              user.$id
+            );
 
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: result.order.amount,
-      currency: "INR",
-      name: "Taglet",
-      description: `Buy ${credits} credits`,
-      order_id: result.order.id,
-      prefill: { name: user.name, email: user.email },
-      theme: { color: "#9333ea" },
+            const currentCredits = userDoc.credits || 0;
+            const newCreditBalance = currentCredits + Number(credits);
 
-      handler: async (response) => {
-        toast.success("🎉 Payment successful!");
+            // 2️⃣ Update user's credit balance
+            await databases.updateDocument(
+              import.meta.env.VITE_APPWRITE_DATABASE_ID,
+              import.meta.env.VITE_APPWRITE_COLLECTION_ID_USERS,
+              user.$id,
+              { credits: newCreditBalance }
+            );
 
-        const payload = {
-          userId: user.$id,
-          credits,
-          amount,
-          razorpayId: response.razorpay_payment_id,
-        };
-        console.log("📤 Payload to apply-credits function:", payload);
+            // 3️⃣ Create transaction record
+            await databases.createDocument(
+              import.meta.env.VITE_APPWRITE_DATABASE_ID,
+              import.meta.env.VITE_APPWRITE_COLLECTION_ID_TRANSACTIONS,
+              ID.unique(),
+              {
+                userId: user.$id,
+                razorpayId: response.razorpay_payment_id,
+                amount: Number(amount),
+                credits: Number(credits),
+                timestamp: new Date().toISOString(),
+              }
+            );
 
-        try {
-          const res = await fetch(
-            `${import.meta.env.VITE_APPWRITE_ENDPOINT}/functions/${
-              import.meta.env.VITE_APPWRITE_FUNCTION_ID_APPLY_CREDITS
-            }/executions`,
-            {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-                "X-Appwrite-Project": import.meta.env.VITE_APPWRITE_PROJECT_ID,
-                "X-Appwrite-Key": import.meta.env.VITE_APPWRITE_API_KEY,
-              },
-              body: JSON.stringify({
-                data: payload, // 🔥 wrap payload in "data" key (Appwrite's REST format)
-              }),
-            }
-          );
-
-          const data = await res.json();
-          console.log("✅ Cloud function response:", data);
-
-          if (data?.success) {
-            toast.success("✅ Credits applied to your account!");
-          } else {
-            toast.error("❌ Credits not applied. Please contact support.");
+            toast.success(`✅ ${credits} credits added to your account`);
+          } catch (err) {
+            console.error("❌ Error applying credits:", err);
+            toast.error("Payment successful, but failed to apply credits.");
           }
-        } catch (err) {
-          console.error("❌ Failed to apply credits:", err.message);
-          toast.error("Failed to update credits. Please contact support.");
-        }
-      },
-    };
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+        },
+        theme: {
+          color: "#9333ea",
+        },
+      });
 
-    const razorpay = new window.Razorpay(options);
-    razorpay.open();
+      razorpay.open();
+    } catch (err) {
+      console.error("❌ Checkout error:", err);
+      toast.error(err.message || "Something went wrong during checkout");
+    }
   };
 
   return { handleBuyCredits };
