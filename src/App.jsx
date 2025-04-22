@@ -27,6 +27,7 @@ import TermsPage from "./pages/TermsPage";
 import Layout from "./pages/Layout";
 import AdminDashboard from "./pages/AdminDashboard";
 import HistoryPage from "./pages/HistoryPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -68,6 +69,7 @@ function App() {
           <Route path="/auth-callback" element={<OAuthCallback />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
 
           {/* Protected Routes */}
           <Route

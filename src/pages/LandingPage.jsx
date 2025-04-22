@@ -311,8 +311,8 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="text-center text-sm text-gray-600 py-10 px-4 bg-white border-t relative z-10">
-        <div className="space-y-3">
+      <footer className="text-center text-sm text-gray-600 py-8 px-4 bg-white border-t relative z-10">
+        <div className="space-y-2">
           <p>
             📸 Follow us on{" "}
             <a
@@ -324,6 +324,7 @@ export default function LandingPage() {
               @taglet.in.official
             </a>
           </p>
+
           <p>
             📬 Contact:{" "}
             <a
@@ -333,15 +334,26 @@ export default function LandingPage() {
               support@taglet.in
             </a>
           </p>
+
           <p>
             💬{" "}
             <Link
               to="/feedback"
               className="text-purple-600 font-medium hover:underline"
             >
-              Send Feedback
+              Give Feedback
             </Link>
           </p>
+
+          <div className="flex justify-center gap-4 text-xs text-gray-500 mt-4">
+            <Link to="/terms" className="hover:underline">
+              Terms & Conditions
+            </Link>
+            <Link to="/privacy" className="hover:underline">
+              Privacy Policy
+            </Link>
+          </div>
+
           <p className="text-xs text-gray-400 mt-4">
             © {new Date().getFullYear()}{" "}
             <span className="text-purple-500 font-semibold">Taglet</span>. All
@@ -349,6 +361,7 @@ export default function LandingPage() {
           </p>
         </div>
       </footer>
+
       {/* Back to Top Button */}
       {showTopBtn && (
         <motion.button

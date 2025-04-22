@@ -148,6 +148,11 @@ export default function CreatePage() {
             />
 
             {/* Generate + Clear Buttons */}
+            <p className="text-xs text-gray-500 text-center mt-2 italic">
+              💡 AI-powered content: Results may vary. regenerate if needed. ⚠️
+              Each generation costs <strong>1 credit</strong>
+            </p>
+
             <div className="flex gap-3 pt-3">
               <button
                 onClick={handleGenerateCaptions}
@@ -163,9 +168,6 @@ export default function CreatePage() {
                 Clear
               </button>
             </div>
-            <p className="text-xs text-gray-500 text-center mt-2">
-              ⚠️ Each generation costs <strong>1 credit</strong>
-            </p>
           </div>
 
           {/* Preview Output */}

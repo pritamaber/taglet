@@ -44,15 +44,18 @@ export default function RefundPage() {
         <h1 className="text-2xl font-bold text-purple-700 mb-4">
           💸 Refund Request
         </h1>
-        <p className="text-xs text-gray-500 mt-2">
-          By submitting, you agree that refunds are only issued for unused
-          credits and at our sole discretion.
+        <p className="text-sm text-gray-700 mt-2">
+          We understand that sometimes things don’t go as planned. If you've
+          made an accidental payment or have concerns about your purchase,
+          you’re welcome to request a review.
         </p>
 
-        <p className="text-sm text-gray-600 mb-6">
-          Credits are instantly usable. We do not offer automatic refunds.
-          However, in case of accidental purchases or duplicate payments, you
-          may request a review.
+        <p className="text-xs text-gray-500 mt-2 mb-6">
+          Please note: Refunds are not issued automatically. They are only
+          considered for unused credits and are reviewed on a case-by-case
+          basis. Refunds are issued solely at the discretion of the platform
+          owner and may take several business days to process. By submitting
+          this form, you agree to our refund policy.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -76,6 +76,23 @@ export default function TermsPage() {
               .
             </p>
           </div>
+          <div>
+            <h2 className="font-semibold text-purple-600">
+              6. AI-Generated Content
+            </h2>
+            <p>
+              All captions and hashtags on Taglet are generated using artificial
+              intelligence (AI). While we strive to provide high-quality and
+              relevant results, the AI may occasionally produce content that is
+              inaccurate, repetitive, or unrelated to the uploaded image.
+            </p>
+            <p className="mt-1">
+              If the results seem off or unusable, we recommend refreshing the
+              page or regenerating the content using your credits. Taglet is not
+              responsible for errors or misinterpretations in AI-generated
+              content.
+            </p>
+          </div>
         </section>
       </div>
     </div>
