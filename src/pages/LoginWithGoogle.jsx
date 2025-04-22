@@ -40,34 +40,32 @@ export default function LoginWithGoogle() {
         className="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl px-6 py-8 sm:p-10 w-full max-w-sm text-center z-10 space-y-6"
       >
         {/* Brand */}
+        🚀
         <motion.h1
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent"
+          className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent pb-2"
         >
-          🚀 Welcome to Taglet
+          Welcome to Taglet
         </motion.h1>
-
         <p className="text-gray-600 text-sm sm:text-base">
           Login with Google and start crafting captions & hashtags effortlessly!
         </p>
-
         {/* Google Login Button */}
         <button
           onClick={loginWithGoogle}
-          className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 transition-transform transform hover:scale-105 text-white font-semibold rounded-full shadow-lg py-2.5 px-4 sm:py-3 sm:px-6 w-full flex items-center justify-center gap-3"
+          className="bg-gradient-to-r  transition-transform transform hover:scale-105 text-white font-semibold rounded-full shadow-lg py-2.5 px-4 sm:py-3 sm:px-6 w-full flex items-center justify-center gap-3"
         >
           <img
             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
             alt="Google logo"
             className="w-5 h-5"
           />
-          <span className="text-sm sm:text-base text-white font-medium">
+          <span className="text-sm sm:text-base text-black font-medium">
             Sign in with Google
           </span>
         </button>
-
         <div className="text-xs text-gray-400 leading-relaxed">
           By signing in, you accept Taglet’s{" "}
           <a href="/terms" className="underline hover:text-purple-500">
