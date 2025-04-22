@@ -16,27 +16,36 @@ export default function Profile() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4">
       <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full space-y-6 text-center">
         <img
-          src={user.avatarUrl}
+          src={
+            user.avatarUrl?.startsWith("http")
+              ? user.avatarUrl
+              : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  user.name || "U"
+                )}`
+          }
           alt="Avatar"
           className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-purple-300 shadow"
         />
         <h2 className="text-2xl font-extrabold text-purple-700">{user.name}</h2>
         <p className="text-gray-600 text-sm">{user.email}</p>
-        <p className="text-green-600 font-semibold">
-          🎯 Credits: {user.credits ?? 0}
-        </p>
-        <p className="text-xs text-gray-500 mt-1 text-center">
-          🎯 1 credit = 1 caption generation
-        </p>
 
-        <button className="mt-4 px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full font-semibold hover:scale-105 transition-transform">
-          ✏️ Edit Profile (coming soon)
-        </button>
+        <div className="bg-purple-50 border border-purple-100 p-4 rounded-xl space-y-1">
+          <p className="text-sm text-gray-700">
+            <span className="font-semibold text-purple-600">🎯 Credits:</span>{" "}
+            <span className="text-green-600 font-bold">
+              {user.credits ?? 0}
+            </span>
+          </p>
+          <p className="text-xs text-gray-500">
+            1 credit = 1 caption or hashtag generation
+          </p>
+        </div>
+
         <Link
           to="/transactions"
-          className="block px-4 py-2 text-sm hover:bg-gray-100"
+          className="inline-block mt-4 px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full font-semibold hover:scale-105 transition-transform"
         >
-          💳 Transactions
+          💳 View Transactions
         </Link>
       </div>
     </div>
