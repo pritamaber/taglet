@@ -76,31 +76,108 @@ export default function LandingPage() {
       </header>
 
       {/* Preview Slideshow Section */}
+      {/* Preview Slideshow Section */}
       <section className="px-6 py-20 bg-white text-center z-10 relative">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 text-purple-600">
           See Taglet in Action
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {[...Array(3)].map((_, i) => (
+          {[
+            {
+              img: "https://picsum.photos/id/57/800/600",
+              caption: "“Vibes on point with this rooftop glow! ☀️”",
+              hashtags: "#rooftop #vibes #citylife #goldenhour #tagletmagic",
+            },
+            {
+              img: "https://picsum.photos/id/64/800/600",
+              caption: "“Caught in candid — effortless and epic ✨”",
+              hashtags:
+                "#candidmoment #reelitfeelit #trendingnow #aiassist #taglet",
+            },
+            {
+              img: "https://picsum.photos/id/103/800/600",
+              caption: "“Summer state of mind. Just me & the sun 🌞”",
+              hashtags: "#summervibes #meandmysun #captiongoals #socialboost",
+            },
+          ].map((item, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.2, duration: 0.6 }}
               className="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-5 rounded-xl shadow-lg border"
             >
               <img
-                src={slideshowImages[i % slideshowImages.length]}
+                src={item.img}
                 alt="Preview"
                 className="rounded-lg mb-4 h-52 object-cover w-full shadow"
               />
               <p className="italic text-gray-800 font-medium text-sm">
-                “Looking fresh and flawless with Taglet 🧃✨”
+                {item.caption}
               </p>
               <div className="mt-2 text-purple-600 text-xs font-semibold break-words leading-relaxed">
-                #aesthetic #captionmagic #reelitfeelit #viralvibes #foryou
-                #instastyle
+                {item.hashtags}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="bg-white px-6 py-20 text-center relative z-10">
+        <motion.h3
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="text-2xl md:text-3xl font-bold text-purple-700 mb-10"
+        >
+          What Creators Are Saying ✨
+        </motion.h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {[
+            {
+              text: "“Taglet is my go-to for reels. It always nails the vibe I'm aiming for!”",
+              user: "reelqueen",
+              handle: "@vibewithria",
+              avatar: "https://i.pravatar.cc/100?img=12",
+            },
+            {
+              text: "“Saved me hours of caption writing — and my posts are finally getting noticed.”",
+              user: "brandboosted",
+              handle: "@adsbymia",
+              avatar: "https://i.pravatar.cc/100?img=15",
+            },
+            {
+              text: "“The hashtags are 🔥. My engagement literally doubled since I started using Taglet.”",
+              user: "creatorhub",
+              handle: "@creatorx",
+              avatar: "https://i.pravatar.cc/100?img=19",
+            },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.2, duration: 0.6 }}
+              className="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-6 rounded-xl shadow-md border"
+            >
+              <p className="text-sm text-gray-700 italic leading-relaxed mb-4">
+                {item.text}
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <img
+                  src={item.avatar}
+                  alt="User avatar"
+                  className="w-10 h-10 rounded-full border"
+                />
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-gray-800">
+                    {item.user}
+                  </p>
+                  <p className="text-xs text-gray-500">{item.handle}</p>
+                </div>
               </div>
             </motion.div>
           ))}
