@@ -2,15 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link href="/src/styles.css" rel="stylesheet" />
+    <link rel="icon" href="/favicon.ico" />
+    <!-- Preload Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Canonical URL for SEO -->
+    <link rel="canonical" href="https://taglet.in" />
+
+    <!-- Razorpay (keep only if you're using it) -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- Meta tags for mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Taglet</title>
+
+    <!-- SEO Meta (React Helmet will override on routes) -->
+    <meta
+      name="description"
+      content="Taglet helps creators and brands generate viral captions and hashtags using AI."
+    />
+    <meta
+      name="keywords"
+      content="AI captions, Instagram, social media tools, hashtag generator, influencer tools, Taglet"
+    />
+    <meta name="author" content="Taglet Team" />
+
+    <title>Taglet – Viral AI Captions & Hashtags for Creators</title>
+
+    <!-- Vite Styles -->
+    <link href="/src/styles.css" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>
