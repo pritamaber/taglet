@@ -125,7 +125,7 @@ export default function Navbar() {
           </button>
         )}
 
-        {/* Avatar Dropdown */}
+        {/* Avatar Dropdown (Desktop) */}
         {!isAuthPage && user && (
           <div ref={menuRef} className="relative ml-4 hidden md:block">
             <div
@@ -193,7 +193,7 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Auth link fallback (only shows Login button for now) */}
+        {/* Auth link fallback */}
         {!user && !isAuthPage && (
           <Link
             to="/login"
@@ -204,7 +204,7 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Mobile Nav Panel */}
+      {/* ✅ Mobile Nav Panel — updated */}
       {mobileNavOpen && user && (
         <div
           ref={mobileRef}
@@ -224,6 +224,9 @@ export default function Navbar() {
           >
             📁 Saved
           </Link>
+
+          <hr className="my-2 border-t border-gray-200" />
+
           <Link
             to="/plan"
             onClick={() => setMobileNavOpen(false)}
@@ -237,6 +240,13 @@ export default function Navbar() {
             className="block px-2 py-1 hover:text-purple-600"
           >
             💸 Transactions
+          </Link>
+          <Link
+            to="/profile"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            👤 Profile
           </Link>
           <Link
             to="/settings"

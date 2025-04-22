@@ -1,4 +1,3 @@
-// ✅ Updated LoginWithGoogle.jsx with Animation & Graphics
 import React from "react";
 import { motion } from "framer-motion";
 import useGoogleAuth from "../hooks/useGoogleAuth";
@@ -7,7 +6,7 @@ export default function LoginWithGoogle() {
   const { loginWithGoogle } = useGoogleAuth();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600 relative overflow-hidden px-4 sm:px-6">
       {/* Animated Background Circles */}
       <motion.div
         initial={{ scale: 0 }}
@@ -18,7 +17,7 @@ export default function LoginWithGoogle() {
           repeat: Infinity,
           repeatType: "reverse",
         }}
-        className="absolute top-0 right-0 w-96 h-96 bg-pink-400 rounded-full filter blur-3xl opacity-30"
+        className="absolute top-0 right-0 w-64 h-64 sm:w-80 sm:h-80 bg-pink-400 rounded-full filter blur-3xl opacity-30"
       />
       <motion.div
         initial={{ scale: 0 }}
@@ -30,7 +29,7 @@ export default function LoginWithGoogle() {
           repeatType: "reverse",
           delay: 1,
         }}
-        className="absolute bottom-0 left-0 w-72 h-72 bg-yellow-300 rounded-full filter blur-3xl opacity-30"
+        className="absolute bottom-0 left-0 w-52 h-52 sm:w-72 sm:h-72 bg-yellow-300 rounded-full filter blur-3xl opacity-30"
       />
 
       {/* Main Login Card */}
@@ -38,37 +37,38 @@ export default function LoginWithGoogle() {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl p-10 max-w-md w-full text-center z-10 space-y-6"
+        className="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl px-6 py-8 sm:p-10 w-full max-w-sm text-center z-10 space-y-6"
       >
-        {/* Taglet Brand */}
+        {/* Brand */}
         <motion.h1
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent pb-2"
+          className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent"
         >
-          🚀 Welcome to #taglet
+          🚀 Welcome to Taglet
         </motion.h1>
 
-        <p className="text-gray-600 ">
-          Quickly login with Google and start crafting captions & hashtags
-          effortlessly!
+        <p className="text-gray-600 text-sm sm:text-base">
+          Login with Google and start crafting captions & hashtags effortlessly!
         </p>
 
         {/* Google Login Button */}
         <button
           onClick={loginWithGoogle}
-          className="bg-gradient-to-r transition-transform transform hover:scale-105 text-white font-semibold rounded-full shadow-lg py-3 px-6 inline-flex items-center gap-3"
+          className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 transition-transform transform hover:scale-105 text-white font-semibold rounded-full shadow-lg py-2.5 px-4 sm:py-3 sm:px-6 w-full flex items-center justify-center gap-3"
         >
           <img
             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
             alt="Google logo"
             className="w-5 h-5"
           />
-          <span className="text-black"> Sign in with Google</span>
+          <span className="text-sm sm:text-base text-white font-medium">
+            Sign in with Google
+          </span>
         </button>
 
-        <div className="text-xs text-gray-400">
+        <div className="text-xs text-gray-400 leading-relaxed">
           By signing in, you accept Taglet’s{" "}
           <a href="/terms" className="underline hover:text-purple-500">
             Terms of Service
