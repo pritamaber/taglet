@@ -13,14 +13,40 @@ export default function AdminDashboard() {
     support,
     transactions,
     updateRefundStatus,
-    loading,
     getTotalRevenue,
     getTotalCredits,
     getWeeklyRevenue,
     userEmails,
+    loading,
   } = useAdminDashboard(isAdmin);
 
   const [selectedTab, setSelectedTab] = useState("Refund");
+
+  const exportToCSV = () => {
+    const headers = ["User Email", "Razorpay ID", "Amount", "Credits", "Date"];
+    const rows = transactions.map((tx) => [
+      userEmails[tx.userId] ?? tx.userId,
+      tx.razorpayId,
+      tx.amount,
+      tx.credits,
+      new Date(tx.timestamp).toLocaleString(),
+    ]);
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers, ...rows].map((e) => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute(
+      "download",
+      `transactions-${new Date().toISOString().slice(0, 10)}.csv`
+    );
+    link.setAttribute("href", encodedUri);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   if (!isAdmin)
     return <div className="text-center text-red-500 mt-10">Access Denied</div>;
@@ -32,6 +58,7 @@ export default function AdminDashboard() {
         Admin Dashboard
       </h1>
 
+      {/* Tabs */}
       <div className="flex gap-4 mb-6">
         {tabs.map((tab) => (
           <button
@@ -48,6 +75,7 @@ export default function AdminDashboard() {
         ))}
       </div>
 
+      {/* Refund Tab */}
       {selectedTab === "Refund" && (
         <div className="space-y-4">
           {refunds.length === 0 && <p>No refund requests found.</p>}
@@ -95,6 +123,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {/* Feedback Tab */}
       {selectedTab === "Feedback" && (
         <div className="space-y-4">
           {feedback.length === 0 && <p>No feedback found.</p>}
@@ -117,6 +146,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {/* Support Tab */}
       {selectedTab === "Support" && (
         <div className="space-y-4">
           {support.length === 0 && <p>No support queries found.</p>}
@@ -139,6 +169,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {/* Revenue Tab */}
       {selectedTab === "Revenue" && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-10">
@@ -164,43 +195,13 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left text-gray-700 bg-white shadow rounded-xl border">
-              <thead className="text-xs uppercase bg-purple-100 text-purple-700">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    User Email
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Razorpay ID
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Amount
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Credits
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((tx) => (
-                  <tr key={tx.$id} className="border-t">
-                    <td className="px-6 py-4">
-                      {userEmails[tx.userId] ?? tx.userId}
-                    </td>
-                    <td className="px-6 py-4">{tx.razorpayId}</td>
-                    <td className="px-6 py-4">₹ {tx.amount}</td>
-                    <td className="px-6 py-4">{tx.credits}</td>
-                    <td className="px-6 py-4">
-                      {new Date(tx.timestamp).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="flex justify-end">
+            <button
+              onClick={exportToCSV}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+            >
+              📤 Download CSV
+            </button>
           </div>
         </>
       )}

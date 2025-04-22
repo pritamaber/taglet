@@ -142,12 +142,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              user?.email === "pritam.aber@gmail.com" ? (
                 <AdminDashboard />
-              </ProtectedRoute>
+              ) : (
+                <Navigate to="/" replace />
+              )
             }
           />
 
