@@ -95,6 +95,16 @@ export default function Navbar() {
               📁 Saved
             </Link>
             <Link
+              to="/history"
+              className={`hover:text-purple-600 ${
+                location.pathname === "/history"
+                  ? "text-purple-600 font-semibold"
+                  : ""
+              }`}
+            >
+              📁 History
+            </Link>
+            <Link
               to="/plan"
               className={`hover:text-purple-600 ${
                 location.pathname === "/plan"
@@ -223,6 +233,13 @@ export default function Navbar() {
             className="block px-2 py-1 hover:text-purple-600"
           >
             📁 Saved
+          </Link>
+          <Link
+            to="/history"
+            onClick={() => setMobileNavOpen(false)}
+            className="block px-2 py-1 hover:text-purple-600"
+          >
+            📁 History
           </Link>
 
           <hr className="my-2 border-t border-gray-200" />

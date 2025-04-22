@@ -26,6 +26,7 @@ import SupportPage from "./pages/SupportPage";
 import TermsPage from "./pages/TermsPage";
 import Layout from "./pages/Layout";
 import AdminDashboard from "./pages/AdminDashboard";
+import HistoryPage from "./pages/HistoryPage";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -90,6 +91,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <SavedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <ProtectedRoute>
+                <HistoryPage />
               </ProtectedRoute>
             }
           />

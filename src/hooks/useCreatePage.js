@@ -5,35 +5,22 @@ import imageCompression from "browser-image-compression";
 import { storage, ID, databases } from "../appwrite/appwriteConfig";
 import { useSaved } from "../hooks/useSaved.jsx";
 import { useAuth } from "../context/AuthContext";
-/**
- * Custom hook to manage caption generation logic for Taglet.
- * Supports image upload, AI captioning, typing animation, and Appwrite image compression/upload.
- */
-export default function useCreatePage(fileInputRef) {
-  // === Upload State ===
-  const [image, setImage] = useState(null); // For preview
-  const [file, setFile] = useState(null); // Raw file object
 
-  // === User Inputs ===
+export default function useCreatePage(fileInputRef) {
+  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
   const [mood, setMood] = useState("");
   const [style, setStyle] = useState("");
   const [customMessage, setCustomMessage] = useState("");
-  const [isReel, setIsReel] = useState(false); // Reel support toggle
-
-  // === Output State ===
+  const [isReel, setIsReel] = useState(false);
   const [caption, setCaption] = useState("");
   const [displayedCaption, setDisplayedCaption] = useState("");
   const [hashtags, setHashtags] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // === Import variable to facilate save post ===
-
   const { savePost } = useSaved();
   const { user, setUser } = useAuth();
 
-  /**
-   * Handle file input from user
-   */
   const handleImageUpload = (e) => {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
@@ -42,9 +29,6 @@ export default function useCreatePage(fileInputRef) {
     }
   };
 
-  /**
-   * Reset all state to initial
-   */
   const clearImage = () => {
     setImage(null);
     setFile(null);
@@ -54,9 +38,6 @@ export default function useCreatePage(fileInputRef) {
     if (fileInputRef?.current) fileInputRef.current.value = "";
   };
 
-  /**
-   * Upload a compressed image to Appwrite bucket and return its preview URL
-   */
   const uploadCompressedImage = async () => {
     if (!file) return null;
 
@@ -67,32 +48,34 @@ export default function useCreatePage(fileInputRef) {
         useWebWorker: true,
       });
 
-      // ✅ Wrap blob into a File with a filename
       const compressedFile = new File([compressed], file.name, {
         type: file.type,
       });
 
       const uploaded = await storage.createFile(
-        import.meta.env.VITE_APPWRITE_BUCKET_ID_CAPTION_IMAGES,
+        import.meta.env.VITE_APPWRITE_BUCKET_ID_HISTORY,
         ID.unique(),
         compressedFile
       );
 
-      const imageUrl = storage.getFilePreview(
-        import.meta.env.VITE_APPWRITE_BUCKET_ID_CAPTION_IMAGES,
-        uploaded.$id
+      const previewUrl = storage.getFilePreview(
+        import.meta.env.VITE_APPWRITE_BUCKET_ID_HISTORY,
+        uploaded.$id,
+        400,
+        400,
+        "top",
+        60
       );
 
+      const imageUrl =
+        typeof previewUrl === "string" ? previewUrl : previewUrl.href;
+      if (!imageUrl) throw new Error("⚠️ imageUrl generation failed.");
       return imageUrl;
     } catch (err) {
-      console.error("❌ Image compression/upload failed:", err);
+      console.error("❌ Image upload failed:", err);
       return null;
     }
   };
-
-  /**
-   * Call the backend AI function to generate captions and hashtags
-   */
 
   const handleGenerateCaptions = async () => {
     if (!file) return alert("Please upload an image first.");
@@ -123,8 +106,23 @@ export default function useCreatePage(fileInputRef) {
         if (index >= result.caption.length) clearInterval(interval);
       }, 25);
 
-      // ✅ Deduct 1 credit after successful generation
-      const updatedCredits = (user.credits || 0) - 1;
+      const imageUrl = await uploadCompressedImage();
+      if (!imageUrl)
+        throw new Error("📛 imageUrl missing — history upload failed.");
+
+      await databases.createDocument(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        import.meta.env.VITE_APPWRITE_COLLECTION_ID_HISTORY,
+        ID.unique(),
+        {
+          userId: user.$id,
+          caption: result.caption,
+          hashtags: result.hashtags,
+          imageUrl,
+        }
+      );
+
+      const updatedCredits = user.credits - 1;
 
       await databases.updateDocument(
         import.meta.env.VITE_APPWRITE_DATABASE_ID,
@@ -139,16 +137,15 @@ export default function useCreatePage(fileInputRef) {
         user.$id
       );
 
-      setUser(updatedUser); // 🔄 update context for navbar
+      setUser(updatedUser);
+      toast.success("✅ Caption generated, saved to history, 1 credit used.");
     } catch (err) {
       console.error("❌ Caption generation failed:", err);
-      toast.error("Failed to generate caption. Please try again.");
+      toast.error(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
-
-  //  Function to save the post at CreatePage.jsx
 
   const handleSave = async () => {
     if (!user || !caption || !hashtags) {
@@ -157,8 +154,6 @@ export default function useCreatePage(fileInputRef) {
     }
 
     const imageUrl = await uploadCompressedImage();
-
-    // ✅ Trim hashtags to 15 max to avoid Appwrite 255-char limit
     const trimmedHashtags = hashtags.split(" ").slice(0, 15).join(" ");
 
     const result = await savePost({
@@ -177,20 +172,14 @@ export default function useCreatePage(fileInputRef) {
     }
   };
 
-  /**
-   * Copy final caption and hashtags to clipboard
-   */
   const copyAll = () => {
     const fullText = `${caption || ""}\n\n${hashtags || ""}`;
     navigator.clipboard.writeText(fullText);
   };
 
   return {
-    // Upload + file
     image,
     file,
-
-    // Inputs
     mood,
     setMood,
     style,
@@ -199,14 +188,10 @@ export default function useCreatePage(fileInputRef) {
     setCustomMessage,
     isReel,
     setIsReel,
-
-    // Output
     caption,
     displayedCaption,
     hashtags,
     loading,
-
-    // Functions
     handleImageUpload,
     handleGenerateCaptions,
     clearImage,
