@@ -60,15 +60,13 @@ export default function Navbar() {
     <nav className="bg-white shadow px-6 py-4">
       <div className="flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="ml-2 cursor-pointer">
-          <h1 className="text-3xl font-poppins font-semibold flex items-center space-x-1">
-            <span className="text-sky-400 hover:scale-110 transition-transform">
-              #
-            </span>
-            <span className="text-purple-500 hover:text-purple-400 transition-all">
-              taglet.in
-            </span>
-          </h1>
+        <Link to="/" className="flex items-center gap-2">
+          <div className="bg-white p-1 rounded-md shadow-sm">
+            <img src="/favicon.ico" alt="Taglet logo" className="w-8 h-8" />
+          </div>
+          <span className="text-2xl font-bold text-purple-600 tracking-tight drop-shadow-sm">
+            taglet
+          </span>
         </Link>
 
         {/* Desktop Nav Links */}
