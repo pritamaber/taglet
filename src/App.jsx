@@ -12,9 +12,8 @@ import { Toaster } from "react-hot-toast";
 
 // Pages
 import CreatePage from "./pages/CreatePage";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
+import LoginWithGoogle from "./pages/LoginWithGoogle";
+import OAuthCallback from "./pages/OAuthCallback";
 import Profile from "./pages/Profile";
 import SavedPage from "./pages/SavedPage";
 import Settings from "./pages/Settings";
@@ -53,29 +52,23 @@ function App() {
       <ScrollToTop />
 
       <Routes>
-        {/* Global Layout Wrapper */}
         <Route element={<Layout />}>
+          {/* Public Entry */}
           <Route
             path="/"
             element={user ? <Navigate to="/create" replace /> : <LandingPage />}
           />
-
-          {/* Auth Pages */}
           <Route
             path="/login"
-            element={!user ? <Login /> : <Navigate to="/create" replace />}
+            element={
+              !user ? <LoginWithGoogle /> : <Navigate to="/create" replace />
+            }
           />
-          <Route
-            path="/register"
-            element={!user ? <Register /> : <Navigate to="/create" replace />}
-          />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-
-          {/* Public Pages */}
+          <Route path="/auth-callback" element={<OAuthCallback />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/terms" element={<TermsPage />} />
 
-          {/* Protected Pages */}
+          {/* Protected Routes */}
           <Route
             path="/create"
             element={
@@ -149,7 +142,7 @@ function App() {
             }
           />
 
-          {/* 404 Fallback */}
+          {/* 404 Page */}
           <Route
             path="*"
             element={

@@ -4,7 +4,7 @@ import { useAdminDashboard } from "../hooks/useAdminDashboard";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
-  const isAdmin = user?.email === "pritam.aber@gmail.com";
+  const isAdmin = user?.email === "admin@gmail.com";
   const { refunds, feedback, support, loading, updateRefundStatus } =
     useAdminDashboard(isAdmin);
   const [activeTab, setActiveTab] = useState("refunds");
