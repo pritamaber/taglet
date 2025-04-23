@@ -74,14 +74,6 @@ export default function CreatePage() {
               Upload an image, pick your vibe, and let Taglet create magic ✨
             </p>
           </div>
-          {caption && (
-            <button
-              onClick={copyAll}
-              className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 transition"
-            >
-              📋 Copy All
-            </button>
-          )}
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -187,28 +179,40 @@ export default function CreatePage() {
               ) : (
                 <>
                   {caption && (
-                    <div className="mt-4">
+                    <div className="mt-4 space-y-2">
                       <h3 className="text-lg font-semibold text-purple-700">
                         📝 {isReel ? "Reel Caption" : "Caption"}
                       </h3>
-                      <p className="italic text-gray-800 mt-1 whitespace-pre-wrap">
+                      <p className="italic text-gray-800 whitespace-pre-wrap">
                         {caption}
                       </p>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(caption)}
+                        className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200 transition"
+                      >
+                        📋 Copy Caption
+                      </button>
                     </div>
                   )}
 
                   {hashtags && (
-                    <div className="mt-4">
+                    <div className="mt-4 space-y-2">
                       <h3 className="text-lg font-semibold text-purple-700">
                         🏷️ Hashtags
                       </h3>
-                      <div className="mt-1 text-sm text-purple-600 leading-relaxed break-words">
+                      <div className="text-sm text-purple-600 leading-relaxed break-words">
                         {hashtags
                           .split(/\s+/)
                           .filter((tag) => tag.startsWith("#"))
                           .map((tag) => tag.replace(/^\d+\.*\s*/, ""))
                           .join(" ")}
                       </div>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(hashtags)}
+                        className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200 transition"
+                      >
+                        📋 Copy Hashtags
+                      </button>
                     </div>
                   )}
 
