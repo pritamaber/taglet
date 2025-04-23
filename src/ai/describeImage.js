@@ -1,4 +1,4 @@
-// ✅ describeImage.js — Send prompt with style to Appwrite function
+// describeImage.js — Optimized for token efficiency
 import { functions } from "../appwrite/appwriteConfig";
 import imageCompression from "browser-image-compression";
 
@@ -23,12 +23,12 @@ const compressImage = async (file) => {
 export const describeImage = async ({ file, mood, style, customMessage }) => {
   try {
     const compressed = await compressImage(file);
-    const base64Image = await toBase64(compressed);
+    const base64WithHeader = await toBase64(compressed);
+    const cleanBase64 = base64WithHeader.split(",")[1]; // Strip data:image/...;base64,
 
-    // 📦 Send all values including new "style"
     const response = await functions.createExecution(
       import.meta.env.VITE_APPWRITE_FUNCTION_ID_GENERATE,
-      JSON.stringify({ base64Image, mood, style, customMessage }),
+      JSON.stringify({ base64Image: cleanBase64, mood, style, customMessage }),
       false
     );
 

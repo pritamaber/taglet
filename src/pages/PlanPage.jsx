@@ -1,10 +1,12 @@
 import { useAuth } from "../context/AuthContext";
 import { usePlanPage } from "../hooks/usePlanPage";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function PlanPage() {
   const { user } = useAuth();
   const { handleBuyCredits } = usePlanPage();
+  const [loadingPlan, setLoadingPlan] = useState(null); // holds plan name being processed
 
   const plans = [
     {
@@ -36,6 +38,20 @@ export default function PlanPage() {
       recommended: false,
     },
   ];
+
+  const handleClick = async (plan) => {
+    setLoadingPlan(plan.name);
+    try {
+      await handleBuyCredits({
+        amount: plan.price,
+        credits: plan.credits,
+      });
+    } catch (err) {
+      console.error("❌ Error during credit purchase:", err);
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 px-4 py-12">
@@ -76,21 +92,45 @@ export default function PlanPage() {
               </div>
 
               <button
-                onClick={() =>
-                  handleBuyCredits({
-                    amount: plan.price,
-                    credits: plan.credits,
-                  })
-                }
-                disabled={plan.price === 0}
-                className={`mt-6 px-4 py-2 rounded-full text-white text-sm font-medium ${
-                  plan.price === 0
+                onClick={() => handleClick(plan)}
+                disabled={plan.price === 0 || loadingPlan === plan.name}
+                className={`mt-6 px-4 py-2 rounded-full text-white text-sm font-medium transition-all duration-200 ${
+                  plan.price === 0 || loadingPlan === plan.name
                     ? "bg-gray-300 cursor-not-allowed"
                     : "bg-purple-600 hover:bg-purple-700"
                 }`}
               >
-                {plan.price === 0 ? "Already Active" : "Buy Now"}
+                {loadingPlan === plan.name ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <svg
+                      className="animate-spin h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8H4z"
+                      />
+                    </svg>
+                    Processing...
+                  </div>
+                ) : plan.price === 0 ? (
+                  "Already Active"
+                ) : (
+                  "Buy Now"
+                )}
               </button>
+
               <p className="text-xs text-gray-400 mt-2 text-center">
                 Refunds are not guaranteed. See our{" "}
                 <Link to="/terms" className="underline text-purple-500">
@@ -100,6 +140,7 @@ export default function PlanPage() {
             </div>
           ))}
         </div>
+
         <p className="text-center text-xs text-gray-500 mt-4">
           ⚡ <strong>1 credit = 1 caption generation</strong>
         </p>
