@@ -1,3 +1,4 @@
+// PlanPage.jsx
 import { useAuth } from "../context/AuthContext";
 import { usePlanPage } from "../hooks/usePlanPage";
 import { Link } from "react-router-dom";
@@ -6,35 +7,49 @@ import { useState } from "react";
 export default function PlanPage() {
   const { user } = useAuth();
   const { handleBuyCredits } = usePlanPage();
-  const [loadingPlan, setLoadingPlan] = useState(null); // holds plan name being processed
+  const [loadingPlan, setLoadingPlan] = useState(null);
 
   const plans = [
     {
-      name: "Free Trial",
+      name: "Freemium",
       price: 0,
-      credits: 5,
-      description: "Try Taglet with limited credits. No payment required.",
+      credits: 3,
+      description: "Try Taglet with 3 free captions. One-time access.",
+      recommended: false,
+    },
+    {
+      name: "Lite",
+      price: 29,
+      credits: 2,
+      description: "Quick test drive for new users.",
       recommended: false,
     },
     {
       name: "Starter",
-      price: 19,
-      credits: 25,
-      description: "For light users — memes, reels, and quick posts.",
+      price: 49,
+      credits: 4,
+      description: "For casual content creators.",
       recommended: false,
     },
     {
-      name: "Pro",
-      price: 49,
-      credits: 100,
-      description: "Perfect for active creators and small brands.",
+      name: "Creator",
+      price: 99,
+      credits: 10,
+      description: "Ideal for regular content creation.",
       recommended: true,
     },
     {
-      name: "Power",
-      price: 119,
-      credits: 250,
-      description: "For daily creators, marketers, and meme lords.",
+      name: "Pro",
+      price: 199,
+      credits: 25,
+      description: "For growing creators and influencers.",
+      recommended: false,
+    },
+    {
+      name: "Influencer",
+      price: 499,
+      credits: 75,
+      description: "Best value for high-volume users.",
       recommended: false,
     },
   ];
@@ -55,12 +70,12 @@ export default function PlanPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 px-4 py-12">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-purple-700 mb-10">
           💳 Choose Your Plan
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {plans.map((plan) => (
             <div
               key={plan.name}
@@ -101,10 +116,9 @@ export default function PlanPage() {
                 }`}
               >
                 {loadingPlan === plan.name ? (
-                  <div className="flex items-center justify-center gap-2">
+                  <span className="flex items-center justify-center gap-2">
                     <svg
-                      className="animate-spin h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
+                      className="animate-spin h-4 w-4"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -113,17 +127,17 @@ export default function PlanPage() {
                         cx="12"
                         cy="12"
                         r="10"
-                        stroke="currentColor"
+                        stroke="white"
                         strokeWidth="4"
                       />
                       <path
                         className="opacity-75"
-                        fill="currentColor"
+                        fill="white"
                         d="M4 12a8 8 0 018-8v8H4z"
                       />
                     </svg>
                     Processing...
-                  </div>
+                  </span>
                 ) : plan.price === 0 ? (
                   "Already Active"
                 ) : (
@@ -132,28 +146,18 @@ export default function PlanPage() {
               </button>
 
               <p className="text-xs text-gray-400 mt-2 text-center">
-                Refunds are not guaranteed. See our{" "}
+                Refunds may take time and are subject to approval. See{" "}
                 <Link to="/terms" className="underline text-purple-500">
-                  Terms and Conditions
+                  Terms
                 </Link>
+                .
               </p>
             </div>
           ))}
         </div>
 
         <p className="text-center text-xs text-gray-500 mt-4">
-          ⚡ <strong>1 credit = 1 caption generation</strong>
-        </p>
-
-        <p className="text-center text-sm text-gray-600 mt-10">
-          Need more credits or want a custom plan?{" "}
-          <Link to="/support" className="text-purple-600 hover:underline">
-            Contact Us
-          </Link>{" "}
-          or{" "}
-          <Link to="/refunds" className="text-purple-600 hover:underline">
-            Request a Refund
-          </Link>
+          ⚡ <strong>1 credit = 1 AI caption generation</strong>
         </p>
       </div>
     </div>

@@ -138,7 +138,7 @@ export default function useCreatePage(fileInputRef) {
       );
 
       setUser(updatedUser);
-      toast.success("✅ Caption generated, saved to history, 1 credit used.");
+      toast.success("✅ Caption generated, saved to history");
     } catch (err) {
       console.error("❌ Caption generation failed:", err);
       toast.error(err.message || "Something went wrong.");
