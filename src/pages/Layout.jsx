@@ -20,10 +20,7 @@ export default function Layout() {
             Feedback
           </Link>
           <Link to="/refunds" className="hover:underline">
-            Refund Policy
-          </Link>
-          <Link to="/terms" className="hover:underline">
-            Terms & Conditions
+            Refund
           </Link>
         </div>
         <p className="text-gray-400">

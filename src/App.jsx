@@ -28,6 +28,7 @@ import Layout from "./pages/Layout";
 import AdminDashboard from "./pages/AdminDashboard";
 import HistoryPage from "./pages/HistoryPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Contact from "./pages/Contact";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -70,6 +71,7 @@ function App() {
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Protected Routes */}
           <Route

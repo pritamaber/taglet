@@ -334,7 +334,7 @@ export default function LandingPage() {
               support@taglet.in
             </a>
           </p>
-
+          {/* 
           <p>
             💬{" "}
             <Link
@@ -343,7 +343,7 @@ export default function LandingPage() {
             >
               Give Feedback
             </Link>
-          </p>
+          </p> */}
 
           <div className="flex justify-center gap-4 text-xs text-gray-500 mt-4">
             <Link to="/terms" className="hover:underline">
@@ -351,6 +351,9 @@ export default function LandingPage() {
             </Link>
             <Link to="/privacy" className="hover:underline">
               Privacy Policy
+            </Link>
+            <Link to="/contact" className="hover:underline">
+              Contact US
             </Link>
           </div>
 
