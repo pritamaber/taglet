@@ -3,6 +3,7 @@ import useCreatePage from "../hooks/useCreatePage";
 
 export default function CreatePage() {
   const fileInputRef = useRef(null);
+  const resultRef = useRef(null);
   const [saving, setSaving] = useState(false);
 
   const {
@@ -25,7 +26,17 @@ export default function CreatePage() {
     handleSave,
   } = useCreatePage(fileInputRef);
 
-  // Mood and style dropdown options with emojis
+  const scrollToResult = () => {
+    if (window.innerWidth < 768 && resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const onGenerateClick = async () => {
+    await handleGenerateCaptions();
+    scrollToResult();
+  };
+
   const moodOptions = [
     { label: "😆 Funny", value: "funny" },
     { label: "💡 Inspirational", value: "inspirational" },
@@ -64,7 +75,6 @@ export default function CreatePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4 py-12 flex justify-center">
       <div className="w-full max-w-6xl space-y-10">
-        {/* Page Header */}
         <header className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-extrabold text-purple-700">
@@ -76,10 +86,8 @@ export default function CreatePage() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Upload + Options */}
-          <div className="bg-white p-6 rounded-xl shadow border space-y-4">
-            {/* Upload */}
+        <div className="flex flex-col md:flex-row gap-8 items-start">
+          <div className="w-full md:w-1/2 bg-white p-6 rounded-xl shadow border space-y-4">
             <label className="block text-sm font-medium text-gray-700">
               Upload an image
             </label>
@@ -91,7 +99,6 @@ export default function CreatePage() {
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
             />
 
-            {/* Reel Mode Toggle */}
             <label className="flex items-center gap-2 text-sm font-medium text-purple-700">
               <input
                 type="checkbox"
@@ -102,7 +109,6 @@ export default function CreatePage() {
               Treat this as a Reel
             </label>
 
-            {/* Mood Dropdown */}
             <select
               value={mood}
               onChange={(e) => setMood(e.target.value)}
@@ -116,7 +122,6 @@ export default function CreatePage() {
               ))}
             </select>
 
-            {/* Style Dropdown */}
             <select
               value={style}
               onChange={(e) => setStyle(e.target.value)}
@@ -130,7 +135,6 @@ export default function CreatePage() {
               ))}
             </select>
 
-            {/* Optional Custom Message */}
             <input
               type="text"
               value={customMessage}
@@ -139,17 +143,16 @@ export default function CreatePage() {
               className="w-full border border-purple-200 rounded-md py-2 px-3 text-sm shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
             />
 
-            {/* Generate + Clear Buttons */}
             <p className="text-xs text-gray-500 text-center mt-2 italic">
-              💡 AI-powered content: Results may vary. regenerate if needed. ⚠️
+              💡 AI-powered content: Results may vary. Regenerate if needed. ⚠️
               Each generation costs <strong>1 credit</strong>
             </p>
 
             <div className="flex gap-3 pt-3">
               <button
-                onClick={handleGenerateCaptions}
+                onClick={onGenerateClick}
                 disabled={loading || !image}
-                className="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-2 rounded font-semibold hover:scale-105 disabled:bg-purple-300"
+                className="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-2 rounded font-semibold hover:scale-105 active:scale-95 transition transform duration-150 disabled:bg-purple-300"
               >
                 ✨ Generate Captions
               </button>
@@ -162,9 +165,14 @@ export default function CreatePage() {
             </div>
           </div>
 
-          {/* Preview Output */}
           {image && (
-            <div className="bg-white p-6 rounded-xl shadow border relative">
+            <div
+              ref={resultRef}
+              className="w-full md:w-1/2 bg-white p-6 rounded-xl shadow border relative overflow-y-auto max-h-[700px]"
+            >
+              <h2 className="text-xl font-bold text-purple-700 mb-2">
+                Generated Post
+              </h2>
               <img
                 src={image}
                 alt="Preview"
@@ -217,46 +225,60 @@ export default function CreatePage() {
                   )}
 
                   {caption && hashtags && (
-                    <div className="mt-4">
+                    <>
                       <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className={`w-full flex items-center justify-center gap-2 text-white px-4 py-2 rounded shadow text-sm transition duration-150
-    ${
-      saving
-        ? "bg-green-400 cursor-not-allowed"
-        : "bg-green-600 active:scale-95"
-    }
-  `}
+                        onClick={() => {
+                          const text = `${caption}\n\n${hashtags}`;
+                          const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                            text
+                          )}`;
+                          window.open(url, "_blank");
+                        }}
+                        className="mt-3 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm transition"
                       >
-                        {saving ? (
-                          <>
-                            <svg
-                              className="w-4 h-4 animate-spin"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
-                              ></path>
-                            </svg>
-                            Saving...
-                          </>
-                        ) : (
-                          <>💾 Save this post</>
-                        )}
+                        📤 Share on WhatsApp
                       </button>
-                    </div>
+
+                      <div className="mt-4">
+                        <button
+                          onClick={handleSave}
+                          disabled={saving}
+                          className={`w-full flex items-center justify-center gap-2 text-white px-4 py-2 rounded shadow text-sm transition duration-150 transform 
+                            ${
+                              saving
+                                ? "bg-green-400 cursor-not-allowed"
+                                : "bg-green-600 hover:bg-green-700 active:scale-95 focus:scale-95 focus:outline-none"
+                            }`}
+                        >
+                          {saving ? (
+                            <>
+                              <svg
+                                className="w-4 h-4 animate-spin"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
+                                ></path>
+                              </svg>
+                              Saving...
+                            </>
+                          ) : (
+                            <>💾 Save this post</>
+                          )}
+                        </button>
+                      </div>
+                    </>
                   )}
                 </>
               )}
