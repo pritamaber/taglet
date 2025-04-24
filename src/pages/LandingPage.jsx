@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 
 const slideshowImages = [
   "https://picsum.photos/seed/1/800/600",
@@ -34,39 +33,6 @@ export default function LandingPage() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  // Open Graph and Twitter Card Metadata SEO
-  <Helmet>
-    <title>Taglet – Viral AI Captions & Hashtags for Creators</title>
-    <meta
-      name="description"
-      content="Taglet uses AI to generate captions and hashtags that go viral. Built for creators, brands, and influencers. Upload an image and let the magic happen."
-    />
-    <meta
-      name="keywords"
-      content="AI captions, hashtag generator, viral captions, Instagram tools, OpenAI, content creator, Taglet"
-    />
-    <meta name="author" content="Taglet Team" />
-
-    {/* Open Graph Tags */}
-    <meta property="og:title" content="Taglet – AI Captions for Creators" />
-    <meta
-      property="og:description"
-      content="Generate captions and hashtags that boost engagement. Built for creators, powered by AI."
-    />
-    <meta property="og:image" content="https://taglet.in/og-cover.jpg" />
-    <meta property="og:url" content="https://taglet.in" />
-    <meta property="og:type" content="website" />
-
-    {/* Twitter Card Tags */}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Taglet – AI Captions for Creators" />
-    <meta
-      name="twitter:description"
-      content="Smart captions & hashtags for your content. Upload an image and go viral."
-    />
-    <meta name="twitter:image" content="https://taglet.in/og-cover.jpg" />
-  </Helmet>;
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 text-gray-800 overflow-hidden">
