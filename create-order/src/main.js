@@ -24,11 +24,13 @@ module.exports = async ({ req, res, log }) => {
 
     log("🔐 Razorpay client initialized");
 
+    const receiptId = `r_${userId.slice(0, 8)}_${Date.now()}`.slice(0, 40); // Ensure <= 40 chars
+
     // Create a new Razorpay order
     const order = await razorpay.orders.create({
       amount: amount * 100,
       currency: "INR",
-      receipt: `r_${userId.slice(0, 8)}_${Date.now()}`,
+      receipt: receiptId,
       notes: { userId, credits },
     });
 
