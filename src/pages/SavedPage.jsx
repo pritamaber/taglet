@@ -12,6 +12,7 @@ export default function SavedPage() {
   const [filterStyle, setFilterStyle] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [showReelsOnly, setShowReelsOnly] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   useEffect(() => {
     const loadSaved = async () => {
@@ -76,6 +77,16 @@ export default function SavedPage() {
     { label: "📈 Trendy", value: "trendy" },
     { label: "💬 Relatable", value: "relatable" },
   ];
+
+  const handleCopy = (text) => navigator.clipboard.writeText(text);
+
+  const handleShareWhatsApp = (caption, hashtags) => {
+    const text = `${caption}\n\n${hashtags}`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+      text
+    )}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 px-4 py-10">
@@ -154,11 +165,12 @@ export default function SavedPage() {
           No matching results found.
         </p>
       ) : (
-        <div className="grid gap-6 max-w-4xl mx-auto">
+        <div className="grid gap-6 max-w-4xl mx-auto overflow-y-auto max-h-[75vh] scroll-smooth scrollbar-thin scrollbar-thumb-purple-300">
           {filteredPosts.map((post) => (
             <div
               key={post.$id}
-              className="flex items-start gap-4 bg-white p-4 rounded-xl shadow border border-purple-200"
+              onClick={() => setSelectedPost(post)}
+              className="flex items-start gap-4 bg-white p-4 rounded-xl shadow border border-purple-200 transition-transform hover:scale-[1.02] hover:shadow-lg cursor-pointer"
             >
               {post.imageUrl && (
                 <img
@@ -183,13 +195,72 @@ export default function SavedPage() {
               </div>
 
               <button
-                onClick={() => handleDelete(post.$id, setPosts)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(post.$id, setPosts);
+                }}
                 className="text-red-500 text-xs hover:underline"
               >
                 Delete
               </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {selectedPost && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-200">
+          <div className="bg-white w-[90%] max-w-sm max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-5 space-y-4 relative transform transition-transform duration-200 scale-100">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-black"
+              onClick={() => setSelectedPost(null)}
+            >
+              ❌
+            </button>
+
+            {selectedPost.imageUrl && (
+              <img
+                src={selectedPost.imageUrl}
+                alt="Preview"
+                className="w-full object-cover rounded border"
+              />
+            )}
+
+            <div>
+              <h3 className="font-semibold text-purple-700">📝 Caption</h3>
+              <p className="text-gray-700 whitespace-pre-wrap">
+                {selectedPost.caption}
+              </p>
+              <button
+                onClick={() => handleCopy(selectedPost.caption)}
+                className="mt-1 text-xs text-purple-600 hover:underline"
+              >
+                📋 Copy Caption
+              </button>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-purple-700">🏷️ Hashtags</h3>
+              <p className="text-purple-600 break-words">
+                {selectedPost.hashtags}
+              </p>
+              <button
+                onClick={() => handleCopy(selectedPost.hashtags)}
+                className="mt-1 text-xs text-purple-600 hover:underline"
+              >
+                📋 Copy Hashtags
+              </button>
+            </div>
+
+            <button
+              onClick={() =>
+                handleShareWhatsApp(selectedPost.caption, selectedPost.hashtags)
+              }
+              className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition text-sm"
+            >
+              📤 Share on WhatsApp
+            </button>
+          </div>
         </div>
       )}
     </div>
